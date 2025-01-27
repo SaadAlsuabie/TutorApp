@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_tutor_navigation"
+    app:startDestination="@+id/nav_tutor_dashboard">
+
+    <fragment
+        android:id="@+id/nav_tutor_dashboard"
+        android:name="com.edu.tutorapp.ui.tutor.dashboard.TutorDashboardFragment"
+        android:label="@string/menu_tutor_dashboard"
+        tools:layout="@layout/fragment_tutor_dashboard" />
+
+    <fragment
+        android:id="@+id/nav_tutor_requests"
+        android:name="com.edu.tutorapp.ui.tutor.requests.TutorRequestsFragment"
+        android:label="@string/menu_tutor_requests"
+        tools:layout="@layout/fragment_tutor_requests" />
+
+    <fragment
+        android:id="@+id/nav_tutor_sessions"
+        android:name="com.edu.tutorapp.ui.tutor.sessions.TutorSessionsFragment"
+        android:label="@string/menu_tutor_sessions"
+        tools:layout="@layout/fragment_tutor_sessions" />
+
+    <fragment
+        android:id="@+id/nav_tutor_records"
+        android:name="com.edu.tutorapp.ui.tutor.recordedmaterials.TutorRecordedMaterialsFragment"
+        android:label="@string/menu_tutor_records"
+        tools:layout="@layout/fragment_tutor_recorded_materials" />
+    <fragment
+        android:id="@+id/nav_tutor_messages"
+        android:name="com.edu.tutorapp.ui.tutor.messages.TutorMessagesFragment"
+        android:label="@string/menu_tutor_messages"
+        tools:layout="@layout/fragment_tutor_messages" />
+    <fragment
+        android:id="@+id/nav_tutor_earnings"
+        android:name="com.edu.tutorapp.ui.tutor.earnings.TutorEarningsFragment"
+        android:label="@string/menu_tutor_earnings"
+        tools:layout="@layout/fragment_tutor_earnings" />
+    <fragment
+        android:id="@+id/nav_tutor_profile"
+        android:name="com.edu.tutorapp.ui.tutor.profile.TutorProfileFragment"
+        android:label="@string/menu_tutor_profile"
+        tools:layout="@layout/fragment_tutor_profile" />
+</navigation>

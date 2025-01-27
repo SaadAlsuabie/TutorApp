@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_s_dashboard"
+            android:icon="@drawable/ic_dashboard"
+            android:title="@string/menu_dashboard" />
+        <item
+            android:id="@+id/nav_findtutor"
+            android:icon="@drawable/ic_find_tutor"
+            android:title="@string/menu_findtutor" />
+        <item
+            android:id="@+id/nav_mysessions"
+            android:icon="@drawable/ic_sessions"
+            android:title="@string/menu_mysessions" />
+        <item
+            android:id="@+id/nav_reclectures"
+            android:icon="@drawable/ic_recorded_lectures"
+            android:title="@string/menu_rcordedlectures" />
+        <item
+            android:id="@+id/nav_messages"
+            android:icon="@drawable/ic_messages"
+            android:title="@string/menu_messages" />
+        <item
+            android:id="@+id/nav_payments"
+            android:icon="@drawable/ic_payment_history"
+            android:title="@string/menu_paymentandhistory" />
+        <item
+            android:id="@+id/nav_s_profile"
+            android:icon="@drawable/ic_profile"
+            android:title="@string/menu_profile" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/action_logout" />
+    </group>
+</menu>

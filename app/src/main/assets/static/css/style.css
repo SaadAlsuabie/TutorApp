@@ -1,0 +1,44 @@
+body {
+  background: #e9ecef;
+}
+
+.custom-alert {
+    min-width: 250px;
+    margin-bottom: 0.5rem;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0.95;
+    transition: opacity 0.4s ease;
+    font-size: 0.9rem;
+  }
+  
+  .alert-success {
+    background-color: #28a745; /* Greenish */
+  }
+  
+  .alert-error {
+    background-color: #dc3545; /* Reddish */
+  }
+  
+  .alert-warning {
+    background-color: #ffc107; /* Yellowish */
+    color: #333; /* Darker text for contrast */
+  }
+  
+  .alert-info {
+    background-color: #17a2b8; /* Tealish */
+  }
+  
+  .btn-primary-custom {
+    background-color: #673ab7;
+    border-color: #673ab7;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: .4rem 0 ;
+    margin: .4rem 0;
+  }
+  .link-text {
+    color: #5900f1;
+  }

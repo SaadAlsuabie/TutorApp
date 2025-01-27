@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Register</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      /* Register Page Custom Styles */
+      body {
+        background: #e9ecef;
+      }
+      .register-container {
+        max-width: 500px;
+        margin: 4rem auto;
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .register-title {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-weight: bold;
+        font-size: 1.5rem;
+      }
+      .form-label {
+        font-weight: 500;
+      }
+      .brand-text {
+        color: #673ab7; /* Example brand color */
+      }
+      .btn-primary-custom {
+        background-color: #673ab7;
+        border-color: #673ab7;
+        color: #ffffff;
+        border-radius: 10px;
+        padding: .4rem 0 ;
+        margin: .4rem 0;
+      }
+      .link-text {
+        color: #5900f1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <div class="register-container">
+          <h2 class="register-title">
+            <span class="brand-text">TutorApp</span> Register
+          </h2>
+          <form>
+            <!-- Name -->
+            <div class="mb-3">
+              <label for="fullName" class="form-label">Full Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="fullName"
+                placeholder="Your full name"
+                required
+              />
+            </div>
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Your email"
+                required
+              />
+            </div>
+            <!-- Password -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                placeholder="Create a password"
+                required
+              />
+            </div>
+            <!-- Profile Type (Student or Tutor) -->
+            <div class="mb-3">
+              <label for="roleSelect" class="form-label">Register as</label>
+              <select class="form-select" id="roleSelect" required>
+                <option value="">-- Select --</option>
+                <option value="student">Student</option>
+                <option value="tutor">Tutor</option>
+              </select>
+            </div>
+            <!-- Example Additional Fields for Tutor -->
+            <div id="tutorFields" style="display: none;">
+              <div class="mb-3">
+                <label for="yearLevel" class="form-label">Academic Year</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="yearLevel"
+                  min="2"
+                  placeholder="2, 3, 4..."
+                />
+              </div>
+              <div class="mb-3">
+                <label for="proof" class="form-label">Proof of Qualifications</label>
+                <input type="file" class="form-control" id="proof" />
+                <div class="form-text">
+                  Upload transcripts or any document proving your qualification.
+                </div>
+              </div>
+            </div>
+            <!-- Register Button -->
+            <div class="d-grid">
+              <button type="button" class="btn-primary-custom" onclick="handleRegister()">
+                Create Account
+              </button>
+            </div>
+          </form>
+          <div class="text-center mt-3">
+            <span>Already have an account?</span>
+            <a onclick="AndroidInterface.nav('login.html')" class="fw-bold link-text">Login</a>
+          </div>
+          <div class="toast-container position-fixed p-3" id="toastContainer" style="bottom: 60px; left:10px;"></div>
+        </div>
+    </div>
+
+    <script src="/static/js/toast.js"></script>
+    <script>
+        function showToast(message, type = "primary", duration = 3000) {
+            const container = document.getElementById("toastContainer");
+            const toastEl = document.createElement("div");
+            toastEl.classList.add("toast", "align-items-center", "text-bg-" + type, "border-0");
+            toastEl.setAttribute("role", "alert");
+            toastEl.setAttribute("aria-live", "assertive");
+            toastEl.setAttribute("aria-atomic", "true");
+            toastEl.innerHTML = `
+              <div class="d-flex">
+                <div class="toast-body">${message}</div>
+              </div>
+            `;
+            container.appendChild(toastEl);
+          
+            // Initialize bootstrap toast
+            const toast = new bootstrap.Toast(toastEl, { delay: duration });
+            toast.show();
+          
+            toastEl.addEventListener("hidden.bs.toast", () => {
+              if (container.contains(toastEl)) {
+                container.removeChild(toastEl);
+              }
+            });
+          }
+      const roleSelect = document.getElementById("roleSelect");
+      const tutorFields = document.getElementById("tutorFields");
+
+      roleSelect.addEventListener("change", () => {
+        if (roleSelect.value === "tutor") {
+          tutorFields.style.display = "block";
+        } else {
+          tutorFields.style.display = "none";
+        }
+      });
+
+      function handleRegister() {
+        const name = document.getElementById("fullName").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const role = document.getElementById("roleSelect").value;
+
+        if (!name || !email || !password || !role) {
+        
+          showToast("Please fill all required fields.", "danger", 4000);
+          return;
+        }
+
+        if (role === "tutor") {
+          const year = document.getElementById("yearLevel").value;
+          if (!year || parseInt(year) < 2) {
+            showToast("Tutors must be at least in their 2nd year.", "danger", 4000);
+            return;
+          }
+        }
+
+        // AndroidInterface.registerUser(name, email, password, role, year, ...);
+        showToast("Registration complete!.");
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

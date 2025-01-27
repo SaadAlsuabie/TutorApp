@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recorded Materials (Tutor)</title>
+    <!-- Bootstrap 5 (CDN) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome (CDN) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      integrity="sha512-shMGgd+pC0+ZfJ/8Y1XfrETQKAnFqJE+qx6m8+z7RLlVTdS4uPFMjmfXjnmw7Zfdi/lJrK6gFh+rC7u9dfFnnw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      :root {
+        --bs-primary: #673ab7;
+        --bs-primary-rgb: 103, 58, 183;
+      }
+      body {
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+      }
+      /* Header */
+      .materials-header {
+        background-color: #673ab7;
+        color: #fff;
+        padding: 1rem;
+        text-align: center;
+      }
+      .materials-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+      .materials-header p {
+        margin: 0.25rem 0 0;
+        font-size: 0.9rem;
+      }
+      /* Upload Section (Optional) */
+      .upload-section {
+        background: #fff;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .upload-btn {
+        font-size: 0.85rem;
+      }
+      /* Materials Cards */
+      .material-card {
+        background: #fff;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+        padding: 1rem;
+      }
+      .material-card h6 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #673ab7;
+      }
+      .material-info {
+        font-size: 0.9rem;
+        color: #555;
+        margin: 0.25rem 0 0.5rem 0;
+      }
+      .material-price {
+        font-weight: 600;
+        color: #333;
+      }
+      .material-actions .btn {
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    
+
+    <div class="container my-3">
+      <!-- Upload Section (Optional) -->
+      <div class="upload-section mb-3">
+        <p class="mb-2">Add a new recorded lesson</p>
+        <input
+          type="text"
+          class="form-control mb-2"
+          placeholder="Lecture Title"
+        />
+        <input
+          type="text"
+          class="form-control mb-2"
+          placeholder="Associated Course"
+        />
+        <input
+          type="number"
+          class="form-control mb-2"
+          placeholder="Price ($)"
+        />
+        <button class="btn btn-primary w-100 upload-btn" type="button">
+          <i class="fas fa-upload me-1"></i>Upload
+        </button>
+      </div>
+
+      <!-- Material Cards -->
+      <!-- Example Material 1 -->
+      <div class="material-card">
+        <h6>Calculus Basics - Part 1</h6>
+        <p class="material-info">Course: MATH101</p>
+        <p class="material-price mb-2">$10.00</p>
+        <div class="material-actions d-flex gap-2">
+          <button class="btn btn-sm btn-secondary" type="button">
+            <i class="fas fa-edit me-1"></i>Edit
+          </button>
+          <button class="btn btn-sm btn-danger" type="button">
+            <i class="fas fa-trash me-1"></i>Delete
+          </button>
+          <button class="btn btn-sm btn-outline-primary" type="button">
+            <i class="fas fa-chart-bar me-1"></i>Stats
+          </button>
+        </div>
+      </div>
+
+      <!-- Example Material 2 -->
+      <div class="material-card">
+        <h6>Advanced Java Programming</h6>
+        <p class="material-info">Course: CS202</p>
+        <p class="material-price mb-2">$15.00</p>
+        <div class="material-actions d-flex gap-2">
+          <button class="btn btn-sm btn-secondary" type="button">
+            <i class="fas fa-edit me-1"></i>Edit
+          </button>
+          <button class="btn btn-sm btn-danger" type="button">
+            <i class="fas fa-trash me-1"></i>Delete
+          </button>
+          <button class="btn btn-sm btn-outline-primary" type="button">
+            <i class="fas fa-chart-bar me-1"></i>Stats
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

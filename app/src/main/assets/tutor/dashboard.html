@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tutor Dashboard (Mobile-First)</title>
+    <!-- Bootstrap 5 (CDN) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome (CDN) for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      integrity="sha512-shMGgd+pC0+ZfJ/8Y1XfrETQKAnFqJE+qx6m8+z7RLlVTdS4uPFMjmfXjnmw7Zfdi/lJrK6gFh+rC7u9dfFnnw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      :root {
+        /* Override Bootstrap's primary color with #673ab7 */
+        --bs-primary: #673ab7;
+        --bs-primary-rgb: 103, 58, 183;
+      }
+      body {
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+      }
+      /* Header / Title */
+      .dashboard-header {
+        background-color: #673ab7;
+        color: #fff;
+        padding: 1rem;
+        text-align: center;
+      }
+      .dashboard-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+      .dashboard-header p {
+        margin: 0.25rem 0 0;
+        font-size: 0.9rem;
+      }
+
+      /* Stats card styling */
+      .stats-card {
+        background: #fff;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        text-align: center;
+        transition: transform 0.2s;
+      }
+      .stats-card:hover {
+        transform: translateY(-3px);
+      }
+      .stats-icon {
+        font-size: 1.75rem;
+        color: #673ab7;
+        margin-bottom: 0.5rem;
+      }
+      .stats-card h4 {
+        font-size: 1rem;
+        margin: 0 0 0.25rem 0;
+      }
+      .stats-card p {
+        margin: 0;
+        font-size: 1.25rem;
+        color: #333;
+      }
+
+      /* Upcoming sessions - card list approach */
+      .session-card {
+        background: #fff;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+        padding: 1rem;
+      }
+      .session-card h6 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #673ab7;
+      }
+      .session-info {
+        font-size: 0.9rem;
+        color: #555;
+        margin: 0.25rem 0 0.5rem 0;
+      }
+      .badge-status {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+      }
+      .session-actions button {
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    
+
+    <!-- Main Container -->
+    <div class="container my-3">
+      <!-- Stats Row (cards) -->
+      <div class="row g-3">
+        <!-- Card 1: Accepted Bookings -->
+        <div class="col-12 col-md-4">
+          <div class="stats-card">
+            <i class="fas fa-calendar-check stats-icon"></i>
+            <h4>Accepted Bookings</h4>
+            <p>4</p>
+          </div>
+        </div>
+        <!-- Card 2: Pending Requests -->
+        <div class="col-12 col-md-4">
+          <div class="stats-card">
+            <i class="fas fa-hourglass-half stats-icon"></i>
+            <h4>Pending Requests</h4>
+            <p>2</p>
+          </div>
+        </div>
+        <!-- Card 3: Earnings -->
+        <div class="col-12 col-md-4">
+          <div class="stats-card">
+            <i class="fas fa-dollar-sign stats-icon"></i>
+            <h4>Earnings</h4>
+            <p>$120</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Sessions List -->
+      <div class="mt-4">
+        <h5 class="mb-3">Upcoming Sessions</h5>
+
+        <!-- Session Card 1 -->
+        <div class="session-card">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6>One-on-One with Sarah Lee</h6>
+              <p class="session-info">
+                Course: MATH210 <br />
+                Sept 15, 9:00 AM
+              </p>
+            </div>
+            <span class="badge bg-success badge-status">Confirmed</span>
+          </div>
+          <div class="session-actions mt-2 text-end">
+            <button class="btn btn-sm btn-primary" type="button">
+              View Details
+            </button>
+            <button class="btn btn-sm btn-secondary" type="button">
+              Message Student
+            </button>
+          </div>
+        </div>
+
+        <!-- Session Card 2 -->
+        <div class="session-card">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6>Group Session with John Doe & Others</h6>
+              <p class="session-info">
+                Course: CS101 <br />
+                Sept 18, 2:00 PM
+              </p>
+            </div>
+            <span class="badge bg-warning text-dark badge-status">Pending</span>
+          </div>
+          <div class="session-actions mt-2 text-end">
+            <button class="btn btn-sm btn-primary" type="button">
+              Accept
+            </button>
+            <button class="btn btn-sm btn-outline-danger" type="button">
+              Decline
+            </button>
+          </div>
+        </div>
+
+        <!-- Session Card 3 (Another Example) -->
+        <div class="session-card">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6>One-on-One with Emily Brown</h6>
+              <p class="session-info">
+                Course: PHYS305 <br />
+                Sept 20, 11:00 AM
+              </p>
+            </div>
+            <span class="badge bg-success badge-status">Confirmed</span>
+          </div>
+          <div class="session-actions mt-2 text-end">
+            <button class="btn btn-sm btn-primary" type="button">
+              View Details
+            </button>
+            <button class="btn btn-sm btn-secondary" type="button">
+              Message Student
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS (only if needed for certain components) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

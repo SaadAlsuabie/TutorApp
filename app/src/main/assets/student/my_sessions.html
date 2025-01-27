@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Sessions (Mobile-First)</title>
+    <!-- Bootstrap 5 (CDN) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome (CDN) for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      integrity="sha512-shMGgd+pC0+ZfJ/8Y1XfrETQKAnFqJE+qx6m8+z7RLlVTdS4uPFMjmfXjnmw7Zfdi/lJrK6gFh+rC7u9dfFnnw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      :root {
+        /* Override Bootstrap's primary color with #673ab7 */
+        --bs-primary: #673ab7;
+        --bs-primary-rgb: 103, 58, 183;
+      }
+      body {
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+      }
+      /* Header / Title */
+      .sessions-header {
+        background-color: #673ab7;
+        color: #fff;
+        padding: 1rem;
+        text-align: center;
+      }
+      .sessions-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+      .sessions-header p {
+        margin: 0.25rem 0 0 0;
+        font-size: 0.9rem;
+      }
+
+      /* Filter Section (optional) */
+      .filter-section {
+        background: #fff;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .filter-btn {
+        font-size: 0.85rem;
+        margin-right: 0.5rem;
+      }
+
+      /* Session Cards */
+      .session-card {
+        background: #fff;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+        padding: 1rem;
+      }
+      .session-card h6 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #673ab7;
+      }
+      .session-info {
+        font-size: 0.9rem;
+        color: #555;
+        margin: 0.25rem 0 0.5rem 0;
+      }
+      .badge-status {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+      }
+      .action-btn {
+        font-size: 0.85rem;
+      }
+      .btn-primary-custom {
+        background-color: #673ab7;
+        border-color: #673ab7;
+        color: #ffffff;
+        border-radius: 10px;
+        padding: .4rem 0 ;
+        margin: .4rem 0;
+      }
+      .btn-primary-sm-custom {
+        background-color: #673ab7;
+        border-color: #673ab7;
+        color: #ffffff;
+        border-radius: 5px;
+        padding: .2rem .8rem ;
+        margin: .4rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    
+
+    <div class="container my-3">
+      <!-- Optional Filter Section -->
+      <div class="filter-section mb-3">
+        <!-- Example filter buttons (Upcoming, Pending, Completed) -->
+        <button class="btn btn-outline-primary filter-btn" type="button">
+          Upcoming
+        </button>
+        <button class="btn btn-outline-primary filter-btn" type="button">
+          Pending
+        </button>
+        <button class="btn btn-outline-primary filter-btn" type="button">
+          Completed
+        </button>
+      </div>
+
+      <!-- Session Cards -->
+      <!-- Example Session Card 1 -->
+      <div class="session-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h6>One-on-One with John Doe</h6>
+            <p class="session-info">
+              Course: MATH210 <br />
+              Date & Time: Sept 15, 9:00 AM
+            </p>
+          </div>
+          <span class="badge bg-success badge-status">Confirmed</span>
+        </div>
+        <!-- Action Buttons (optional) -->
+        <div class="mt-2 text-end">
+          <button class="btn-primary-sm-custom action-btn">
+            View Details
+          </button>
+          <button class="btn btn-sm btn-secondary action-btn">
+            Message Tutor
+          </button>
+        </div>
+      </div>
+
+      <!-- Example Session Card 2 -->
+      <div class="session-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h6>Group Session with Jane Smith</h6>
+            <p class="session-info">
+              Course: CS101 <br />
+              Date & Time: Sept 20, 2:00 PM
+            </p>
+          </div>
+          <span class="badge bg-warning text-dark badge-status">Pending</span>
+        </div>
+        <div class="mt-2 text-end">
+          <button class="btn-primary-sm-custom action-btn">
+            View Details
+          </button>
+          <button class="btn btn-sm btn-secondary action-btn">
+            Message Tutor
+          </button>
+        </div>
+      </div>
+
+      <!-- Example Session Card 3 -->
+      <div class="session-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h6>Recorded Session: Physics 305</h6>
+            <p class="session-info">
+              Tutor: Robert Brown <br />
+              Purchased: Sept 1
+            </p>
+          </div>
+          <span class="badge bg-secondary badge-status">Completed</span>
+        </div>
+        <div class="mt-2 text-end">
+          <button class="btn-primary-sm-custom action-btn">
+            Watch Recording
+          </button>
+          <button class="btn btn-sm btn-outline-dark action-btn">
+            Rate Tutor
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS (only if needed for certain components) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

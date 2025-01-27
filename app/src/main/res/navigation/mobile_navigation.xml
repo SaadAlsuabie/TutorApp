@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_s_dashboard">
+
+    <fragment
+        android:id="@+id/nav_s_dashboard"
+        android:name="com.edu.tutorapp.ui.student.dashboard.StudentDashboardFragment"
+        android:label="@string/menu_dashboard"
+        tools:layout="@layout/fragment_student_dashboard" />
+
+    <fragment
+        android:id="@+id/nav_findtutor"
+        android:name="com.edu.tutorapp.ui.student.findtutor.StudentFindTutorFragment"
+        android:label="@string/menu_findtutor"
+        tools:layout="@layout/fragment_student_find_tutor" />
+
+    <fragment
+        android:id="@+id/nav_mysessions"
+        android:name="com.edu.tutorapp.ui.student.sessions.StudentSessionsFragment"
+        android:label="@string/menu_mysessions"
+        tools:layout="@layout/fragment_student_sessions" />
+
+    <fragment
+        android:id="@+id/nav_reclectures"
+        android:name="com.edu.tutorapp.ui.student.courses.StudentRecordedLecturesFragment"
+        android:label="@string/menu_rcordedlectures"
+        tools:layout="@layout/fragment_student_recorded_lectures" />
+    <fragment
+        android:id="@+id/nav_messages"
+        android:name="com.edu.tutorapp.ui.student.messages.StudentMessagesFragment"
+        android:label="@string/menu_messages"
+        tools:layout="@layout/fragment_student_messages" />
+    <fragment
+        android:id="@+id/nav_payments"
+        android:name="com.edu.tutorapp.ui.student.paymentshistory.StudentPaymentsHistoryFragment"
+        android:label="@string/menu_paymentandhistory"
+        tools:layout="@layout/fragment_student_payments_history" />
+    <fragment
+        android:id="@+id/nav_s_profile"
+        android:name="com.edu.tutorapp.ui.student.profile.StudentProfileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_student_profile" />
+</navigation>

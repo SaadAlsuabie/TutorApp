@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Student Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome (for icons) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      integrity="sha512-shMGgd+pC0+ZfJ/8Y1XfrETQKAnFqJE+qx6m8+z7RLlVTdS4uPFMjmfXjnmw7Zfdi/lJrK6gFh+rC7u9dfFnnw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      :root {
+        /* Override Bootstrap's primary color with #673ab7 */
+        --bs-primary: #673ab7;
+        --bs-primary-rgb: 103, 58, 183;
+      }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: flex;
+        background-color: #f8f9fa;
+      }
+      /* Sidebar styling */
+      #sidebar {
+        width: 250px;
+        background: #ffffff;
+        border-right: 1px solid #dee2e6;
+      }
+      .sidebar-header {
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+      .nav-link {
+        color: #333;
+      }
+      .nav-link:hover {
+        background: #e2e6ea;
+      }
+      .nav-link i {
+        margin-right: 0.5rem;
+      }
+      /* Main content area */
+      .main-content {
+        flex-grow: 1;
+        padding: 1.5rem;
+      }
+      /* Dashboard Header */
+      .dashboard-header {
+        background-color: #673ab7;
+        color: #fff;
+        padding: 1rem;
+        border-radius: 0.25rem;
+        margin-bottom: 1rem;
+      }
+      .dashboard-header h2 {
+        margin: 0;
+      }
+      .dashboard-header p {
+        margin: 0;
+        opacity: 0.9;
+      }
+      /* Stats cards */
+      .stats-card {
+        background: #ffffff;
+        border-radius: 0.25rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 1.25rem;
+        text-align: center;
+        transition: transform 0.2s;
+      }
+      .stats-card:hover {
+        transform: translateY(-3px);
+      }
+      .stats-card .icon {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+        color: #673ab7;
+      }
+      .stats-card h4 {
+        margin: 0 0 0.25rem 0;
+        font-size: 1.25rem;
+      }
+      .stats-card p {
+        margin: 0;
+        color: #666;
+      }
+      /* Upcoming sessions table */
+      .upcoming-sessions-table {
+        background: #ffffff;
+        border-radius: 0.25rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .table th {
+        background-color: #f1f1f1;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div id="sidebar" class="p-3">
+      <div class="sidebar-header mb-4 text-primary">TutorApp</div>
+      <ul class="nav flex-column">
+        <!-- Dashboard -->
+        <li class="nav-item mb-2">
+          <a href="#" class="nav-link active">
+            <i class="fas fa-home"></i>
+            Dashboard
+          </a>
+        </li>
+        <!-- Find a Tutor -->
+        <li class="nav-item mb-2">
+          <a href="#" class="nav-link">
+            <i class="fas fa-search"></i>
+            Find a Tutor
+          </a>
+        </li>
+        <!-- My Sessions -->
+        <li class="nav-item mb-2">
+          <a href="#" class="nav-link">
+            <i class="fas fa-calendar-alt"></i>
+            My Sessions
+          </a>
+        </li>
+        <!-- Recorded Lectures -->
+        <li class="nav-item mb-2">
+          <a href="#" class="nav-link">
+            <i class="fas fa-play-circle"></i>
+            Recorded Lectures
+          </a>
+        </li>
+        <!-- Messages -->
+        <li class="nav-item mb-2">
+          <a href="#" class="nav-link">
+            <i class="fas fa-comments"></i>
+            Messages
+          </a>
+        </li>
+        <!-- Payments & History -->
+        <li class="nav-item mb-2">
+          <a href="#" class="nav-link">
+            <i class="fas fa-file-invoice-dollar"></i>
+            Payments &amp; History
+          </a>
+        </li>
+        <!-- Profile -->
+        <li class="nav-item mb-2">
+          <a href="#" class="nav-link">
+            <i class="fas fa-user"></i>
+            Profile
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Dashboard Header / Welcome Section -->
+      <div class="dashboard-header mb-4">
+        <h2>Welcome, [Student Name]!</h2>
+        <p>Here’s what’s happening with your studies today:</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="row g-3 mb-4">
+        <!-- Card 1: Upcoming Sessions -->
+        <div class="col-md-4">
+          <div class="stats-card">
+            <div class="icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <h4>Upcoming Sessions</h4>
+            <p>3</p>
+          </div>
+        </div>
+        <!-- Card 2: Pending Requests -->
+        <div class="col-md-4">
+          <div class="stats-card">
+            <div class="icon">
+              <i class="fas fa-hourglass-half"></i>
+            </div>
+            <h4>Pending Requests</h4>
+            <p>2</p>
+          </div>
+        </div>
+        <!-- Card 3: Purchased Recordings -->
+        <div class="col-md-4">
+          <div class="stats-card">
+            <div class="icon">
+              <i class="fas fa-play-circle"></i>
+            </div>
+            <h4>Recorded Lectures</h4>
+            <p>5</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Sessions Table -->
+      <div class="upcoming-sessions-table p-3">
+        <h5 class="mb-3">Your Upcoming Sessions</h5>
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th scope="col">Session</th>
+              <th scope="col">Tutor</th>
+              <th scope="col">Course</th>
+              <th scope="col">Date & Time</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Example Row 1 -->
+            <tr>
+              <td>One-on-One</td>
+              <td>John Doe</td>
+              <td>Mathematics 101</td>
+              <td>Sept 10, 10:00 AM</td>
+              <td><span class="badge bg-warning text-dark">Pending</span></td>
+            </tr>
+            <!-- Example Row 2 -->
+            <tr>
+              <td>Group Session</td>
+              <td>Jane Smith</td>
+              <td>Computer Science 202</td>
+              <td>Sept 12, 2:00 PM</td>
+              <td><span class="badge bg-success">Confirmed</span></td>
+            </tr>
+            <!-- Example Row 3 -->
+            <tr>
+              <td>One-on-One</td>
+              <td>Robert Brown</td>
+              <td>Physics 305</td>
+              <td>Sept 15, 9:00 AM</td>
+              <td><span class="badge bg-success">Confirmed</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS (only if you need Bootstrap components like modals or dropdowns) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

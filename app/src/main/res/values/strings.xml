@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">TutorApp</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">TUTORApp</string>
+    <string name="nav_header_subtitle">Connecting you to best Tutors</string>
+    <string name="nav_header_subtitle_tutor">Connecting you to Students</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="menu_dashboard">Dashboard</string>
+    <string name="menu_findtutor">Find Tutor</string>
+    <string name="menu_mysessions">My Sessions</string>
+    <string name="menu_rcordedlectures">Recorded Lectures</string>
+    <string name="menu_messages">Messages</string>
+    <string name="menu_paymentandhistory">Payments &amp; History</string>
+    <string name="menu_profile">Profile</string>
+
+    <string name="menu_tutor_dashboard">Dashboard</string>
+    <string name="menu_tutor_requests">Requests</string>
+    <string name="menu_tutor_sessions">My Sessions</string>
+    <string name="menu_tutor_records">Recorded Materials</string>
+    <string name="menu_tutor_messages">Messages</string>
+    <string name="menu_tutor_earnings">Earnings &amp; Transactions</string>
+    <string name="menu_tutor_profile">Profile</string>
+
+
+</resources>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Login</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+      :root {
+        /* Ensure our primary color is still #673ab7 */
+        --bs-primary: #673ab7;
+        --bs-primary-rgb: 103, 58, 183;
+      }
+      body {
+        background: #e9ecef;
+      }
+
+      .login-container {
+        max-width: 400px;
+        margin: 5rem auto;
+        padding: 2rem;
+        background: #ffffff;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .login-title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .brand-text {
+        color: #673ab7;
+      }
+      .btn-primary-custom {
+        background-color: #673ab7;
+        border-color: #673ab7;
+        color: #ffffff;
+        border-radius: 10px;
+        padding: .4rem 0 ;
+        margin: .4rem 0;
+      }
+      .link-text {
+        color: #5900f1;
+      }
+      .form-label {
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+
+        <div class="login-container">
+          <h2 class="login-title">
+            <span class="brand-text">TutorApp</span> Login
+          </h2>
+          <form>
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+            <!-- Password -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+            <!-- Login Button -->
+            <div class="d-grid">
+              <button type="button" class="btn-primary-custom" onclick="handleLogin()">
+                Login
+              </button>
+            </div>
+          </form>
+          <div class="text-center mt-3">
+            <a onclick="AndroidInterface.nav('forgot_password.html')" class="text-decoration-none link-text">Forgot password?</a>
+            <br />
+            <span>Don't have an account?</span>
+            <a onclick="AndroidInterface.nav('register.html')" class="fw-bold text-decoration-none link-text"
+              >Sign Up</a
+            >
+          </div>
+          <div class="toast-container position-fixed p-3" id="toastContainer" style="bottom: 60px; left:10px;"></div>
+        </div>
+    </div>
+
+
+    <script src="/static/js/toast.js"></script>
+    <script>
+        function showToast(message, type = "primary", duration = 3000) {
+            const container = document.getElementById("toastContainer");
+            const toastEl = document.createElement("div");
+            toastEl.classList.add("toast", "align-items-center", "text-bg-" + type, "border-0");
+            toastEl.setAttribute("role", "alert");
+            toastEl.setAttribute("aria-live", "assertive");
+            toastEl.setAttribute("aria-atomic", "true");
+            toastEl.innerHTML = `
+              <div class="d-flex">
+                <div class="toast-body">${message}</div>
+              </div>
+            `;
+            container.appendChild(toastEl);
+          
+            // Initialize bootstrap toast
+            const toast = new bootstrap.Toast(toastEl, { delay: duration });
+            toast.show();
+          
+            toastEl.addEventListener("hidden.bs.toast", () => {
+              if (container.contains(toastEl)) {
+                container.removeChild(toastEl);
+              }
+            });
+          }
+
+      function handleLogin() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        if (!email || !password) {
+          showToast("please provide both the email and password!", "danger", 4000);
+          return;
+        }
+
+        if (email === "name@student.tutorapp.com" && password === "1234") {
+          showToast("Login successful!", "success", 4000);
+          AndroidInterface.navToMainActivity();
+          
+        } else if (email === "name@tutor.tutorapp.com" && password === "1234") {
+            showToast("Login successful!", "success", 4000);
+            AndroidInterface.navToTutorMainActivity();
+            
+        } else {
+            showToast("Invalid credentials!!!", "danger", 4000);
+        }
+        // Placeholder alert; in your actual app, call your JS->Java interface:
+        // AndroidInterface.loginUser(email, password);
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
