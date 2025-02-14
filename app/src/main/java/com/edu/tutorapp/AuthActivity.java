@@ -3,6 +3,7 @@ package com.edu.tutorapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -11,6 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
+import okhttp3.*;
+
 
 public class AuthActivity extends AppCompatActivity {
     private WebView myWebView;
@@ -43,10 +50,181 @@ public class AuthActivity extends AppCompatActivity {
             this.mContext = c;
         }
 
+        /**
+         * Register a new user via the API using OkHttp.
+         *
+         * @param username The username entered by the user.
+         * @param email    The email entered by the user.
+         * @param password The password entered by the user.
+         * @param role     The user role (e.g., "student", "tutor").
+         * @return true if registration is successful, false otherwise.
+         */
+        @JavascriptInterface
+        public boolean registerUser(String username, String email, String password, String role) {
+            OkHttpClient client = new OkHttpClient();
+
+            // Create JSON payload
+            JSONObject jsonPayload = new JSONObject();
+            try {
+                jsonPayload.put("username", username);
+                jsonPayload.put("email", email);
+                jsonPayload.put("password", password);
+                jsonPayload.put("role", role); // Role can be "student" or "tutor"
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            // Build the request
+            RequestBody body = RequestBody.create(
+                    jsonPayload.toString(),
+                    MediaType.get("application/json; charset=utf-8")
+            );
+
+            Request request = new Request.Builder()
+                    .url("https://;localhost/register/") // Replace with your API URL
+                    .post(body)
+                    .build();
+
+            // Execute the request asynchronously
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    ((AuthActivity) mContext).runOnUiThread(() -> {
+                        myWebView.loadUrl("javascript:showError('Failed to connect to server during registration')");
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        try (ResponseBody responseBody = response.body()) {
+                            if (responseBody != null) {
+                                String responseData = responseBody.string();
+                                JSONObject jsonResponse = new JSONObject(responseData);
+                                String message = jsonResponse.optString("message", "Registration successful");
+
+                                // Show success message
+                                ((AuthActivity) mContext).runOnUiThread(() -> {
+                                    myWebView.loadUrl("javascript:showSuccess('" + message + "')");
+                                });
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            ((AuthActivity) mContext).runOnUiThread(() -> {
+                                myWebView.loadUrl("javascript:showError('Invalid response from server during registration')");
+                            });
+                        }
+                    } else {
+                        ((AuthActivity) mContext).runOnUiThread(() -> {
+                            myWebView.loadUrl("javascript:showError('Registration failed')");
+                        });
+                    }
+                }
+            });
+
+            return true; // Indicate that the registration process has started
+        }
+        /**
+         * Verify user login credentials via the API using OkHttp.
+         *
+         * @param username The username entered by the user.
+         * @param password The password entered by the user.
+         * @return true if login is successful, false otherwise.
+         */
+        @JavascriptInterface
+        public boolean verifyLogin(String username, String password) {
+            OkHttpClient client = new OkHttpClient();
+
+            // Create JSON payload
+            JSONObject jsonPayload = new JSONObject();
+            try {
+                jsonPayload.put("username", username);
+                jsonPayload.put("password", password);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            // Build the request
+            RequestBody body = RequestBody.create(
+                    jsonPayload.toString(),
+                    MediaType.get("application/json; charset=utf-8")
+            );
+
+            Request request = new Request.Builder()
+                    .url("https://localhost/login/") // Replace with your API URL
+                    .post(body)
+                    .build();
+
+            // Execute the request asynchronously
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    ((AuthActivity) mContext).runOnUiThread(() -> {
+                        myWebView.loadUrl("javascript:showError('Failed to connect to server')");
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        try (ResponseBody responseBody = response.body()) {
+                            if (responseBody != null) {
+                                String responseData = responseBody.string();
+                                JSONObject jsonResponse = new JSONObject(responseData);
+                                String role = jsonResponse.getString("role"); // Assuming the API returns the user role
+
+                                // Navigate to appropriate activity
+                                ((AuthActivity) mContext).runOnUiThread(() -> {
+                                    navigateToAppropriateActivity(role);
+                                });
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            ((AuthActivity) mContext).runOnUiThread(() -> {
+                                myWebView.loadUrl("javascript:showError('Invalid response from server')");
+                            });
+                        }
+                    } else {
+                        ((AuthActivity) mContext).runOnUiThread(() -> {
+                            myWebView.loadUrl("javascript:showError('Invalid username or password')");
+                        });
+                    }
+                }
+            });
+
+            return true; // Indicate that the verification process has started
+        }
+
+        /**
+         * Register a new tutor.
+         *
+         * @return true if registration is successful, false otherwise.
+         */
         @JavascriptInterface
         public boolean registerTutor() {
+            return true; // Placeholder for registration logic
+        }
 
-            return true; // or false if invalid
+        /**
+         * Navigate to the main activity for students.
+         */
+        @JavascriptInterface
+        public void navToMainActivity() {
+            Intent mainActivity = new Intent(AuthActivity.this, MainActivity.class);
+            startActivity(mainActivity);
+        }
+
+        /**
+         * Navigate to the main activity for tutors.
+         */
+        @JavascriptInterface
+        public void navToTutorMainActivity() {
+            Intent tutorActivity = new Intent(AuthActivity.this, TutorMainActivity.class);
+            startActivity(tutorActivity);
         }
 
         @JavascriptInterface
@@ -85,5 +263,17 @@ public class AuthActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void navigateToAppropriateActivity(String role) {
+        if ("student".equals(role)) {
+            Intent mainActivity = new Intent(AuthActivity.this, MainActivity.class);
+            startActivity(mainActivity);
+        } else if ("tutor".equals(role)) {
+            Intent tutorActivity = new Intent(AuthActivity.this, TutorMainActivity.class);
+            startActivity(tutorActivity);
+        } else {
+            myWebView.loadUrl("javascript:showError('Unknown user role')");
+        }
     }
 }
