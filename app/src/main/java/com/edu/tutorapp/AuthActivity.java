@@ -8,6 +8,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -89,15 +90,7 @@ public class AuthActivity extends AppCompatActivity {
             // Execute the request asynchronously
             client.newCall(request).enqueue(new Callback() {
                 @Override
-                public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
-                    ((AuthActivity) mContext).runOnUiThread(() -> {
-                        myWebView.loadUrl("javascript:showError('Failed to connect to server during registration')");
-                    });
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
+                public void onResponse(@NonNull okhttp3.Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()) {
                         try (ResponseBody responseBody = response.body()) {
                             if (responseBody != null) {
@@ -122,6 +115,48 @@ public class AuthActivity extends AppCompatActivity {
                         });
                     }
                 }
+
+                @Override
+                public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
+                    ((AuthActivity) mContext).runOnUiThread(() -> {
+                        myWebView.loadUrl("javascript:showError('Failed to connect to server during registration')");
+                    });
+                }
+
+//                @Override
+//                public void onFailure(Call call, IOException e) {
+//                    e.printStackTrace();
+//                    ((AuthActivity) mContext).runOnUiThread(() -> {
+//                        myWebView.loadUrl("javascript:showError('Failed to connect to server during registration')");
+//                    });
+//                }
+//
+//                @Override
+//                public void onResponse(Call call, Response response) throws IOException {
+//                    if (response.isSuccessful()) {
+//                        try (ResponseBody responseBody = response.body()) {
+//                            if (responseBody != null) {
+//                                String responseData = responseBody.string();
+//                                JSONObject jsonResponse = new JSONObject(responseData);
+//                                String message = jsonResponse.optString("message", "Registration successful");
+//
+//                                // Show success message
+//                                ((AuthActivity) mContext).runOnUiThread(() -> {
+//                                    myWebView.loadUrl("javascript:showSuccess('" + message + "')");
+//                                });
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                            ((AuthActivity) mContext).runOnUiThread(() -> {
+//                                myWebView.loadUrl("javascript:showError('Invalid response from server during registration')");
+//                            });
+//                        }
+//                    } else {
+//                        ((AuthActivity) mContext).runOnUiThread(() -> {
+//                            myWebView.loadUrl("javascript:showError('Registration failed')");
+//                        });
+//                    }
+//                }
             });
 
             return true; // Indicate that the registration process has started
@@ -161,15 +196,7 @@ public class AuthActivity extends AppCompatActivity {
             // Execute the request asynchronously
             client.newCall(request).enqueue(new Callback() {
                 @Override
-                public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
-                    ((AuthActivity) mContext).runOnUiThread(() -> {
-                        myWebView.loadUrl("javascript:showError('Failed to connect to server')");
-                    });
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
+                public void onResponse(@NonNull okhttp3.Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()) {
                         try (ResponseBody responseBody = response.body()) {
                             if (responseBody != null) {
@@ -194,6 +221,48 @@ public class AuthActivity extends AppCompatActivity {
                         });
                     }
                 }
+
+                @Override
+                public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
+                    ((AuthActivity) mContext).runOnUiThread(() -> {
+                        myWebView.loadUrl("javascript:showError('Failed to connect to server')");
+                    });
+                }
+
+//                @Override
+//                public void onFailure(Call call, IOException e) {
+//                    e.printStackTrace();
+//                    ((AuthActivity) mContext).runOnUiThread(() -> {
+//                        myWebView.loadUrl("javascript:showError('Failed to connect to server')");
+//                    });
+//                }
+//
+//                @Override
+//                public void onResponse(Call call, Response response) throws IOException {
+//                    if (response.isSuccessful()) {
+//                        try (ResponseBody responseBody = response.body()) {
+//                            if (responseBody != null) {
+//                                String responseData = responseBody.string();
+//                                JSONObject jsonResponse = new JSONObject(responseData);
+//                                String role = jsonResponse.getString("role"); // Assuming the API returns the user role
+//
+//                                // Navigate to appropriate activity
+//                                ((AuthActivity) mContext).runOnUiThread(() -> {
+//                                    navigateToAppropriateActivity(role);
+//                                });
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                            ((AuthActivity) mContext).runOnUiThread(() -> {
+//                                myWebView.loadUrl("javascript:showError('Invalid response from server')");
+//                            });
+//                        }
+//                    } else {
+//                        ((AuthActivity) mContext).runOnUiThread(() -> {
+//                            myWebView.loadUrl("javascript:showError('Invalid username or password')");
+//                        });
+//                    }
+//                }
             });
 
             return true; // Indicate that the verification process has started
@@ -222,21 +291,12 @@ public class AuthActivity extends AppCompatActivity {
          * Navigate to the main activity for tutors.
          */
         @JavascriptInterface
-        public void navToTutorMainActivity() {
+        public void navToTutorTutorActivity() {
             Intent tutorActivity = new Intent(AuthActivity.this, TutorMainActivity.class);
             startActivity(tutorActivity);
         }
 
-        @JavascriptInterface
-        public void navToMainActivity() {
-            Intent mainActivity = new Intent(AuthActivity.this, MainActivity.class);
-            startActivity(mainActivity);
-        }
-        @JavascriptInterface
-        public void navToTutorMainActivity() {
-            Intent tutorActivity = new Intent(AuthActivity.this, TutorMainActivity.class);
-            startActivity(tutorActivity);
-        }
+
         @JavascriptInterface
         public void nav(String page) {
             try{
