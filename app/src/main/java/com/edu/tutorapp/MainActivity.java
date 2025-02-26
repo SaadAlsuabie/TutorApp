@@ -1,6 +1,7 @@
 package com.edu.tutorapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
@@ -23,6 +24,13 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private static final String SHARED_PREF_NAME = "MyAppPreferences"; // Name of the preference file
+    private static final String KEY_USERNAME = "username"; // Key for storing username
+    private static final String KEY_ROLE = "role"; // Key for storing role
+    private static final String KEY_ACCESS_TOKEN = "access_token"; // Key for storing access token
+    private static final String KEY_REFRESH_TOKEN = "refresh_token"; // Key for storing refresh token
+    private static final String KEY_TIMEOUT = "timeout"; // Key for storing timeout
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +60,15 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_logout) {
                 Intent authIntent = new Intent(MainActivity.this, AuthActivity.class);
+                sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putString(KEY_ROLE, "none");
+                editor.putString(KEY_USERNAME, "none");
+                editor.putString(KEY_ACCESS_TOKEN, "none");
+                editor.putString(KEY_REFRESH_TOKEN, "none");
+                editor.apply();
                 startActivity(authIntent);
 //                finish();
                 return true;

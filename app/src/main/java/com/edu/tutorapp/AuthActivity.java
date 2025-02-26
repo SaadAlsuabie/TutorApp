@@ -2,9 +2,12 @@ package com.edu.tutorapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.telecom.Call;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebView;
 
 import androidx.activity.EdgeToEdge;
@@ -22,6 +25,16 @@ import okhttp3.*;
 
 public class AuthActivity extends AppCompatActivity {
     private WebView myWebView;
+    private final String BASEURL = "https://accentor490.pythonanywhere.com";
+    private static final String SHARED_PREF_NAME = "MyAppPreferences"; // Name of the preference file
+    private static final String KEY_USERNAME = "username"; // Key for storing username
+    private static final String KEY_ROLE = "role"; // Key for storing role
+    private static final String KEY_ACCESS_TOKEN = "access_token"; // Key for storing access token
+    private static final String KEY_REFRESH_TOKEN = "refresh_token"; // Key for storing refresh token
+    private static final String KEY_TIMEOUT = "timeout"; // Key for storing timeout
+
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,14 +46,21 @@ public class AuthActivity extends AppCompatActivity {
             return insets;
         });
 
-        myWebView = findViewById(R.id.authWebView);
-        myWebView.getSettings().setJavaScriptEnabled(true);
+         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+        String access_token = sharedPreferences.getString(KEY_ACCESS_TOKEN, "logged_out");
+        String role = sharedPreferences.getString(KEY_ROLE, "unknown role");
 
-        WebAppInterface androidInterface = new WebAppInterface(this);
-        myWebView.addJavascriptInterface(androidInterface, "AndroidInterface");
+        if ("none".equals(access_token)){
+            myWebView = findViewById(R.id.authWebView);
+            myWebView.getSettings().setJavaScriptEnabled(true);
 
-        myWebView.loadUrl("file:///android_asset/auth/login.html");
+            WebAppInterface androidInterface = new WebAppInterface(this);
+            myWebView.addJavascriptInterface(androidInterface, "AndroidInterface");
 
+            myWebView.loadUrl("file:///android_asset/auth/login.html");
+        } else {
+            navigateToAppropriateActivity(role);
+        }
     }
 
 
@@ -83,7 +103,7 @@ public class AuthActivity extends AppCompatActivity {
             );
 
             Request request = new Request.Builder()
-                    .url("https://;localhost/register/") // Replace with your API URL
+                    .url(BASEURL+"/register/") // Replace with your API URL
                     .post(body)
                     .build();
 
@@ -123,40 +143,6 @@ public class AuthActivity extends AppCompatActivity {
                     });
                 }
 
-//                @Override
-//                public void onFailure(Call call, IOException e) {
-//                    e.printStackTrace();
-//                    ((AuthActivity) mContext).runOnUiThread(() -> {
-//                        myWebView.loadUrl("javascript:showError('Failed to connect to server during registration')");
-//                    });
-//                }
-//
-//                @Override
-//                public void onResponse(Call call, Response response) throws IOException {
-//                    if (response.isSuccessful()) {
-//                        try (ResponseBody responseBody = response.body()) {
-//                            if (responseBody != null) {
-//                                String responseData = responseBody.string();
-//                                JSONObject jsonResponse = new JSONObject(responseData);
-//                                String message = jsonResponse.optString("message", "Registration successful");
-//
-//                                // Show success message
-//                                ((AuthActivity) mContext).runOnUiThread(() -> {
-//                                    myWebView.loadUrl("javascript:showSuccess('" + message + "')");
-//                                });
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                            ((AuthActivity) mContext).runOnUiThread(() -> {
-//                                myWebView.loadUrl("javascript:showError('Invalid response from server during registration')");
-//                            });
-//                        }
-//                    } else {
-//                        ((AuthActivity) mContext).runOnUiThread(() -> {
-//                            myWebView.loadUrl("javascript:showError('Registration failed')");
-//                        });
-//                    }
-//                }
             });
 
             return true; // Indicate that the registration process has started
@@ -175,7 +161,7 @@ public class AuthActivity extends AppCompatActivity {
             // Create JSON payload
             JSONObject jsonPayload = new JSONObject();
             try {
-                jsonPayload.put("username", username);
+                jsonPayload.put("username_or_email", username);
                 jsonPayload.put("password", password);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -189,7 +175,7 @@ public class AuthActivity extends AppCompatActivity {
             );
 
             Request request = new Request.Builder()
-                    .url("https://localhost/login/") // Replace with your API URL
+                    .url(BASEURL+"/login/") // Replace with your API URL
                     .post(body)
                     .build();
 
@@ -203,21 +189,53 @@ public class AuthActivity extends AppCompatActivity {
                                 String responseData = responseBody.string();
                                 JSONObject jsonResponse = new JSONObject(responseData);
                                 String role = jsonResponse.getString("role"); // Assuming the API returns the user role
+                                String access_token = jsonResponse.getString("access");
+                                String refresh_token = jsonResponse.getString("refresh");
+                                String username = jsonResponse.getString("username");
 
-                                // Navigate to appropriate activity
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                                editor.putString(KEY_ROLE, role);
+                                editor.putString(KEY_USERNAME, username);
+                                editor.putString(KEY_ACCESS_TOKEN, access_token);
+                                editor.putString(KEY_REFRESH_TOKEN, refresh_token);
+                                editor.apply();
+
+//                                String savedUsername = sharedPreferences.getString(KEY_USERNAME, "DefaultUser");
+//                                Log.e("Stored Username: ", savedUsername);
+
                                 ((AuthActivity) mContext).runOnUiThread(() -> {
+                                    myWebView.evaluateJavascript("hideLoadingSpinner()", new ValueCallback<String>() {
+                                        @Override
+                                        public void onReceiveValue(String value) {
+                                            // Handle the result returned from JavaScript (if any)
+                                            Log.d("WebView", "Result from JS: " + value);
+                                        }
+                                    });
                                     navigateToAppropriateActivity(role);
                                 });
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
                             ((AuthActivity) mContext).runOnUiThread(() -> {
-                                myWebView.loadUrl("javascript:showError('Invalid response from server')");
+                                myWebView.evaluateJavascript("showToast(\"An error occurred in the application\", \"danger\", 4000)", new ValueCallback<String>() {
+                                    @Override
+                                    public void onReceiveValue(String value) {
+                                        // Handle the result returned from JavaScript (if any)
+                                        Log.d("WebView", "Result from JS: " + value);
+                                    }
+                                });
                             });
                         }
                     } else {
                         ((AuthActivity) mContext).runOnUiThread(() -> {
-                            myWebView.loadUrl("javascript:showError('Invalid username or password')");
+                            myWebView.evaluateJavascript("showToast(\"Invalid credentials!!!\", \"danger\", 4000)", new ValueCallback<String>() {
+                                @Override
+                                public void onReceiveValue(String value) {
+                                    // Handle the result returned from JavaScript (if any)
+                                    Log.d("WebView", "Result from JS: " + value);
+                                }
+                            });
                         });
                     }
                 }
