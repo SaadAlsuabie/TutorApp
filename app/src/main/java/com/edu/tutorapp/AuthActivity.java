@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.telecom.Call;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
@@ -17,6 +19,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -111,27 +114,88 @@ public class AuthActivity extends AppCompatActivity {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onResponse(@NonNull okhttp3.Call call, @NonNull Response response) throws IOException {
+
                     if (response.isSuccessful()) {
                         try (ResponseBody responseBody = response.body()) {
                             if (responseBody != null) {
                                 String responseData = responseBody.string();
+
                                 JSONObject jsonResponse = new JSONObject(responseData);
                                 String message = jsonResponse.optString("message", "Registration successful");
 
                                 // Show success message
                                 ((AuthActivity) mContext).runOnUiThread(() -> {
-                                    myWebView.loadUrl("javascript:showSuccess('" + message + "')");
+                                    myWebView.evaluateJavascript("hideLoadingSpinner()", new ValueCallback<String>() {
+                                        @Override
+                                        public void onReceiveValue(String value) {
+                                            // Handle the result returned from JavaScript (if any)
+                                            Log.d("WebView", "Result from JS: " + value);
+                                        }
+                                    });
+                                    myWebView.evaluateJavascript("showToast(\"Registration Successfull!.\", \"success\", 4000)", new ValueCallback<String>() {
+                                        @Override
+                                        public void onReceiveValue(String value) {
+                                            // Handle the result returned from JavaScript (if any)
+                                            Log.d("WebView", "Result from JS: " + value);
+                                        }
+                                    });
+                                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                        myWebView.loadUrl("file:///android_asset/auth/login.html");
+                                    }, 5000);
                                 });
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
                             ((AuthActivity) mContext).runOnUiThread(() -> {
-                                myWebView.loadUrl("javascript:showError('Invalid response from server during registration')");
+                                myWebView.evaluateJavascript("hideLoadingSpinner()", new ValueCallback<String>() {
+                                    @Override
+                                    public void onReceiveValue(String value) {
+                                        // Handle the result returned from JavaScript (if any)
+                                        Log.d("WebView", "Result from JS: " + value);
+                                    }
+                                });
+                                myWebView.evaluateJavascript("showToast(\"Invalid response from server during registration.\", \"danger\", 4000)", new ValueCallback<String>() {
+                                    @Override
+                                    public void onReceiveValue(String value) {
+                                        // Handle the result returned from JavaScript (if any)
+                                        Log.d("WebView", "Result from JS: " + value);
+                                    }
+                                });
                             });
                         }
                     } else {
+                            String errorRes = "null";
+                            ResponseBody responseBody = response.body();
+                            if (responseBody != null) {
+                                String responseData = responseBody.string();
+                                JSONObject jsonResponse = null;
+                                try {
+                                    jsonResponse = new JSONObject(responseData);
+                                    errorRes = jsonResponse.getString("error");
+
+                                } catch (JSONException e) {
+    //                                throw new RuntimeException(e);
+                                }
+
+                            }
+
+                        String finalErrorRes = errorRes;
                         ((AuthActivity) mContext).runOnUiThread(() -> {
-                            myWebView.loadUrl("javascript:showError('Registration failed')");
+                            myWebView.evaluateJavascript("hideLoadingSpinner()", new ValueCallback<String>() {
+                                @Override
+                                public void onReceiveValue(String value) {
+                                    // Handle the result returned from JavaScript (if any)
+                                    Log.d("WebView", "Result from JS: " + value);
+                                }
+                            });
+                            String res = "Registration failed." + finalErrorRes;
+                            myWebView.evaluateJavascript("showToast(\"Registration failed. User already exist.\", \"danger\", 4000)", new ValueCallback<String>() {
+                                @Override
+                                public void onReceiveValue(String value) {
+                                    // Handle the result returned from JavaScript (if any)
+                                    Log.d("WebView", "Result from JS: " + value);
+                                }
+                            });
                         });
                     }
                 }
@@ -139,7 +203,20 @@ public class AuthActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
                     ((AuthActivity) mContext).runOnUiThread(() -> {
-                        myWebView.loadUrl("javascript:showError('Failed to connect to server during registration')");
+                        myWebView.evaluateJavascript("hideLoadingSpinner()", new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
+                                // Handle the result returned from JavaScript (if any)
+                                Log.d("WebView", "Result from JS: " + value);
+                            }
+                        });
+                        myWebView.evaluateJavascript("showToast(\"Failed to connect to server during registration.\", \"danger\", 4000)", new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
+                                // Handle the result returned from JavaScript (if any)
+                                Log.d("WebView", "Result from JS: " + value);
+                            }
+                        });
                     });
                 }
 
@@ -218,6 +295,13 @@ public class AuthActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                             ((AuthActivity) mContext).runOnUiThread(() -> {
+                                myWebView.evaluateJavascript("hideLoadingSpinner()", new ValueCallback<String>() {
+                                    @Override
+                                    public void onReceiveValue(String value) {
+                                        // Handle the result returned from JavaScript (if any)
+                                        Log.d("WebView", "Result from JS: " + value);
+                                    }
+                                });
                                 myWebView.evaluateJavascript("showToast(\"An error occurred in the application\", \"danger\", 4000)", new ValueCallback<String>() {
                                     @Override
                                     public void onReceiveValue(String value) {
@@ -229,6 +313,13 @@ public class AuthActivity extends AppCompatActivity {
                         }
                     } else {
                         ((AuthActivity) mContext).runOnUiThread(() -> {
+                            myWebView.evaluateJavascript("hideLoadingSpinner()", new ValueCallback<String>() {
+                                @Override
+                                public void onReceiveValue(String value) {
+                                    // Handle the result returned from JavaScript (if any)
+                                    Log.d("WebView", "Result from JS: " + value);
+                                }
+                            });
                             myWebView.evaluateJavascript("showToast(\"Invalid credentials!!!\", \"danger\", 4000)", new ValueCallback<String>() {
                                 @Override
                                 public void onReceiveValue(String value) {
@@ -243,44 +334,23 @@ public class AuthActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
                     ((AuthActivity) mContext).runOnUiThread(() -> {
-                        myWebView.loadUrl("javascript:showError('Failed to connect to server')");
+                        myWebView.evaluateJavascript("hideLoadingSpinner()", new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
+                                // Handle the result returned from JavaScript (if any)
+                                Log.d("WebView", "Result from JS: " + value);
+                            }
+                        });
+                        myWebView.evaluateJavascript("showToast(\"Failed to connect to server!\", \"danger\", 4000)", new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
+                                // Handle the result returned from JavaScript (if any)
+                                Log.d("WebView", "Result from JS: " + value);
+                            }
+                        });
                     });
                 }
 
-//                @Override
-//                public void onFailure(Call call, IOException e) {
-//                    e.printStackTrace();
-//                    ((AuthActivity) mContext).runOnUiThread(() -> {
-//                        myWebView.loadUrl("javascript:showError('Failed to connect to server')");
-//                    });
-//                }
-//
-//                @Override
-//                public void onResponse(Call call, Response response) throws IOException {
-//                    if (response.isSuccessful()) {
-//                        try (ResponseBody responseBody = response.body()) {
-//                            if (responseBody != null) {
-//                                String responseData = responseBody.string();
-//                                JSONObject jsonResponse = new JSONObject(responseData);
-//                                String role = jsonResponse.getString("role"); // Assuming the API returns the user role
-//
-//                                // Navigate to appropriate activity
-//                                ((AuthActivity) mContext).runOnUiThread(() -> {
-//                                    navigateToAppropriateActivity(role);
-//                                });
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                            ((AuthActivity) mContext).runOnUiThread(() -> {
-//                                myWebView.loadUrl("javascript:showError('Invalid response from server')");
-//                            });
-//                        }
-//                    } else {
-//                        ((AuthActivity) mContext).runOnUiThread(() -> {
-//                            myWebView.loadUrl("javascript:showError('Invalid username or password')");
-//                        });
-//                    }
-//                }
             });
 
             return true; // Indicate that the verification process has started

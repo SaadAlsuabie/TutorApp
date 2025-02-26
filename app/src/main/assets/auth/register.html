@@ -109,12 +109,12 @@
           <form>
             <!-- Name -->
             <div class="mb-3">
-              <label for="fullName" class="form-label">Full Name</label>
+              <label for="fullName" class="form-label">UserName</label>
               <input
                 type="text"
                 class="form-control"
                 id="fullName"
-                placeholder="Your full name"
+                placeholder="Username"
                 required
               />
             </div>
@@ -268,18 +268,15 @@
             return;
         }
 
-        if (role === "tutor" && email.includes("@tutor")){
-
-        } else {
-            showToast("Tutor email must end with @tutor.example.com.", "danger", 4000);
-            return;
+        if (role === "tutor" && !email.includes("@tutor")){
+          showToast("Tutor email must end with @tutor.example.com.", "danger", 4000);
+          return;
+        } 
+        if (role === "student" && !email.includes("@student")){
+          showToast("Student email must end with @student.example.com.", "danger", 4000);
+          return;
         }
-        if (role === "student" && email.includes("@student")){
-
-        } else {
-            showToast("Student email must end with @student.example.com.", "danger", 4000);
-            return;
-        }
+        
 
 
         if (!name || !email || !password || !role) {
@@ -300,7 +297,7 @@
         // AndroidInterface.registerUser(name, email, password, role, year, ...);
         // showToast("Registration complete!.");
       }
-      showLoadingSpinner();
+      // showLoadingSpinner();
     </script>
     </body>
 </html>
