@@ -109,11 +109,22 @@
           <form>
             <!-- Name -->
             <div class="mb-3">
-              <label for="fullName" class="form-label">UserName</label>
+              <label for="fullName" class="form-label">Full Name</label>
               <input
                 type="text"
                 class="form-control"
                 id="fullName"
+                placeholder="FirstName SecondName"
+                required
+              />
+            </div>
+            <!-- Name -->
+            <div class="mb-3">
+              <label for="username" class="form-label">UserName</label>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
                 placeholder="Username"
                 required
               />
@@ -159,6 +170,38 @@
                 <option value="student">Student</option>
                 <option value="tutor">Tutor</option>
               </select>
+            </div>
+            <!-- Example Additional Fields for Student -->
+            <div id="tutorFields" style="display: none;">
+              <div class="mb-3">
+                <label for="faculty" class="form-label">Faculty</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="faculty"
+                  placeholder="Faculty"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="major" class="form-label">Major</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="major"
+                  placeholder="Major"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="yearLevel" class="form-label">Academic Year</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="yearLevelstudent"
+                  min="1"
+                  placeholder="1, 2, 3, 4..."
+                />
+              </div>
+              
             </div>
             <!-- Example Additional Fields for Tutor -->
             <div id="tutorFields" style="display: none;">
@@ -256,12 +299,16 @@
       });
 
       function handleRegister() {
+        const username = document.getElementById("username").value;
         const name = document.getElementById("fullName").value;
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
         const confirmpassword = document.getElementById("confirmpassword").value;
         const role = document.getElementById("roleSelect").value;
         const year = document.getElementById("yearLevel").value;
+        const yearS = document.getElementById("yearLevelstudent").value;
+        const faculty = document.getElementById("faculty").value;
+        const major = document.getElementById("major").value;
 
         if (password !== confirmpassword){
             showToast("Password did not much!.", "danger", 4000);
@@ -292,7 +339,7 @@
           }
         }
         showLoadingSpinner();
-        AndroidInterface.registerUser(name, email, password, role);
+        AndroidInterface.registerUser(name, username, email, password, role, faculty, major, year, yearS);
 
         // AndroidInterface.registerUser(name, email, password, role, year, ...);
         // showToast("Registration complete!.");
