@@ -19,12 +19,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.edu.tutorapp.utils.SharedPreferencesUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import okhttp3.*;
-
 
 public class AuthActivity extends AppCompatActivity {
     private WebView myWebView;
@@ -37,6 +38,7 @@ public class AuthActivity extends AppCompatActivity {
     private static final String KEY_TIMEOUT = "timeout"; // Key for storing timeout
 
     private SharedPreferences sharedPreferences;
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +51,21 @@ public class AuthActivity extends AppCompatActivity {
             return insets;
         });
 
-         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
-        String access_token = sharedPreferences.getString(KEY_ACCESS_TOKEN, "logged_out");
-        String role = sharedPreferences.getString(KEY_ROLE, "unknown role");
+//         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+//        String access_token = sharedPreferences.getString(KEY_ACCESS_TOKEN, "logged_out");
+//        String role = sharedPreferences.getString(KEY_ROLE, "unknown role");
 
-        if ("none".equals(access_token)){
-            myWebView = findViewById(R.id.authWebView);
-            myWebView.getSettings().setJavaScriptEnabled(true);
+        sharedPreferencesUtils = new SharedPreferencesUtils(this);
+        String access_token = sharedPreferencesUtils.getAccessToken();
+        String role = sharedPreferencesUtils.getRole();
 
-            WebAppInterface androidInterface = new WebAppInterface(this);
-            myWebView.addJavascriptInterface(androidInterface, "AndroidInterface");
+        myWebView = findViewById(R.id.authWebView);
+        myWebView.getSettings().setJavaScriptEnabled(true);
 
+        WebAppInterface androidInterface = new WebAppInterface(this);
+        myWebView.addJavascriptInterface(androidInterface, "AndroidInterface");
+
+        if ("none".equals(access_token) || "none".equals(role)){
             myWebView.loadUrl("file:///android_asset/auth/login.html");
         } else {
             navigateToAppropriateActivity(role);
@@ -84,16 +90,21 @@ public class AuthActivity extends AppCompatActivity {
          * @return true if registration is successful, false otherwise.
          */
         @JavascriptInterface
-        public boolean registerUser(String username, String email, String password, String role) {
+        public boolean registerUser(String fullname, String username, String email, String password, String role, String faculty, String major, String year, String yearLevelstudent) {
             OkHttpClient client = new OkHttpClient();
 
             // Create JSON payload
             JSONObject jsonPayload = new JSONObject();
             try {
                 jsonPayload.put("username", username);
+                jsonPayload.put("fullname", fullname);
                 jsonPayload.put("email", email);
                 jsonPayload.put("password", password);
                 jsonPayload.put("role", role); // Role can be "student" or "tutor"
+                jsonPayload.put("faculty", faculty);
+                jsonPayload.put("major", major);
+                jsonPayload.put("yearleveltutor", year);
+                jsonPayload.put("yearlevelstudent", yearLevelstudent);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -189,7 +200,7 @@ public class AuthActivity extends AppCompatActivity {
                                 }
                             });
                             String res = "Registration failed." + finalErrorRes;
-                            myWebView.evaluateJavascript("showToast(\"Registration failed. User already exist.\", \"danger\", 4000)", new ValueCallback<String>() {
+                            myWebView.evaluateJavascript("showToast(\"Registration failed. "+finalErrorRes+"\", \"danger\", 4000)", new ValueCallback<String>() {
                                 @Override
                                 public void onReceiveValue(String value) {
                                     // Handle the result returned from JavaScript (if any)
@@ -270,16 +281,10 @@ public class AuthActivity extends AppCompatActivity {
                                 String refresh_token = jsonResponse.getString("refresh");
                                 String username = jsonResponse.getString("username");
 
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                                editor.putString(KEY_ROLE, role);
-                                editor.putString(KEY_USERNAME, username);
-                                editor.putString(KEY_ACCESS_TOKEN, access_token);
-                                editor.putString(KEY_REFRESH_TOKEN, refresh_token);
-                                editor.apply();
-
-//                                String savedUsername = sharedPreferences.getString(KEY_USERNAME, "DefaultUser");
-//                                Log.e("Stored Username: ", savedUsername);
+                                sharedPreferencesUtils.saveRole(role);
+                                sharedPreferencesUtils.saveUsername(username);
+                                sharedPreferencesUtils.saveAccessToken(access_token);
+                                sharedPreferencesUtils.saveRefreshToken(refresh_token);
 
                                 ((AuthActivity) mContext).runOnUiThread(() -> {
                                     myWebView.evaluateJavascript("hideLoadingSpinner()", new ValueCallback<String>() {
@@ -410,10 +415,10 @@ public class AuthActivity extends AppCompatActivity {
 
             }
         }
-
     }
 
     private void navigateToAppropriateActivity(String role) {
+
         if ("student".equals(role)) {
             Intent mainActivity = new Intent(AuthActivity.this, MainActivity.class);
             startActivity(mainActivity);

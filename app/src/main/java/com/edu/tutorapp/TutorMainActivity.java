@@ -22,19 +22,15 @@ import androidx.navigation.ui.NavigationUI;
 import com.edu.tutorapp.databinding.ActivityMainBinding;
 import com.edu.tutorapp.databinding.ActivityTutorMainBinding;
 import com.edu.tutorapp.databinding.AppBarTutorMainBinding;
+import com.edu.tutorapp.utils.SharedPreferencesUtils;
 import com.google.android.material.navigation.NavigationView;
 
 public class TutorMainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private AppBarTutorMainBinding tAppBarConfiguratiom;
     private ActivityTutorMainBinding binding;
-    private static final String SHARED_PREF_NAME = "MyAppPreferences"; // Name of the preference file
-    private static final String KEY_USERNAME = "username"; // Key for storing username
-    private static final String KEY_ROLE = "role"; // Key for storing role
-    private static final String KEY_ACCESS_TOKEN = "access_token"; // Key for storing access token
-    private static final String KEY_REFRESH_TOKEN = "refresh_token"; // Key for storing refresh token
-    private static final String KEY_TIMEOUT = "timeout"; // Key for storing timeout
-    private SharedPreferences sharedPreferences;
+
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +57,12 @@ public class TutorMainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_tutor_logout) {
                 Intent authIntent = new Intent(TutorMainActivity.this, AuthActivity.class);
-                sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                editor.putString(KEY_ROLE, "none");
-                editor.putString(KEY_USERNAME, "none");
-                editor.putString(KEY_ACCESS_TOKEN, "none");
-                editor.putString(KEY_REFRESH_TOKEN, "none");
-                editor.apply();
+                sharedPreferencesUtils = new SharedPreferencesUtils(this);
+                sharedPreferencesUtils.saveRole("none");
+                sharedPreferencesUtils.saveUsername("none");
+                sharedPreferencesUtils.saveAccessToken("none");
+                sharedPreferencesUtils.saveRefreshToken("none");
                 startActivity(authIntent);
 //                finish();
                 return true;
