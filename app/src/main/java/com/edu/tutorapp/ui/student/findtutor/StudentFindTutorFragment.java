@@ -200,7 +200,7 @@ public class StudentFindTutorFragment extends Fragment {
                                 String message = jsonResponse.optString("message", "request successful");
                                 requireActivity().runOnUiThread(() -> {
                                     webview.evaluateJavascript("hideLoadingSpinner()", null);
-                                    webview.evaluateJavascript("showToast("+ message +", 'danger', 4000)", null);
+                                    webview.evaluateJavascript("showToast("+ message +", 'success', 4000)", null);
                                 });
                             } catch (Exception e) {
                                 requireActivity().runOnUiThread(() -> {

@@ -172,7 +172,7 @@
               </select>
             </div>
             <!-- Example Additional Fields for Student -->
-            <div id="tutorFields" style="display: none;">
+            <div id="studentFields" style="display: none;">
               <div class="mb-3">
                 <label for="faculty" class="form-label">Faculty</label>
                 <input
@@ -289,12 +289,18 @@
           }
       const roleSelect = document.getElementById("roleSelect");
       const tutorFields = document.getElementById("tutorFields");
+      const studentFields = document.getElementById("studentFields");
 
       roleSelect.addEventListener("change", () => {
         if (roleSelect.value === "tutor") {
           tutorFields.style.display = "block";
         } else {
           tutorFields.style.display = "none";
+        }
+        if (roleSelect.value === "student") {
+          studentFields.style.display = "block";
+        } else {
+          studentFields.style.display = "none";
         }
       });
 
