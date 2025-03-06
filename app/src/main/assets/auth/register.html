@@ -216,6 +216,33 @@
                 />
               </div>
               <div class="mb-3">
+                <label for="facultyt" class="form-label">Faculty</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="facultyt"
+                  placeholder="Faculty"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="majort" class="form-label">Major</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="majort"
+                  placeholder="Major"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="courses" class="form-label">Courses</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="courses"
+                  placeholder="Course"
+                />
+              </div>
+              <div class="mb-3 d-none">
                 <label for="proof" class="form-label">Proof of Qualifications</label>
                 <input type="file" class="form-control" id="proof" />
                 <div class="form-text">
@@ -313,8 +340,11 @@
         const role = document.getElementById("roleSelect").value;
         const year = document.getElementById("yearLevel").value;
         const yearS = document.getElementById("yearLevelstudent").value;
-        const faculty = document.getElementById("faculty").value;
-        const major = document.getElementById("major").value;
+        var faculty = document.getElementById("faculty").value;
+        var major = document.getElementById("major").value;
+        const facultyt = document.getElementById("facultyt").value;
+        const courses = document.getElementById("courses").value;
+        const majort = document.getElementById("majort").value;
 
         if (password !== confirmpassword){
             showToast("Password did not much!.", "danger", 4000);
@@ -329,8 +359,6 @@
           showToast("Student email must end with @student.example.com.", "danger", 4000);
           return;
         }
-        
-
 
         if (!name || !email || !password || !role) {
         
@@ -340,12 +368,14 @@
 
         if (role === "tutor") {
           if (!year || parseInt(year) < 2) {
+            faculty = facultyt;
+            major = majort;
             showToast("Tutors must be at least in their 2nd year.", "danger", 4000);
             return;
           }
         }
         showLoadingSpinner();
-        AndroidInterface.registerUser(name, username, email, password, role, faculty, major, year, yearS);
+        AndroidInterface.registerUser(name, username, email, password, role, faculty, major, courses, year, yearS);
 
         // AndroidInterface.registerUser(name, email, password, role, year, ...);
         // showToast("Registration complete!.");

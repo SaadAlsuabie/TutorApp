@@ -90,7 +90,7 @@ public class AuthActivity extends AppCompatActivity {
          * @return true if registration is successful, false otherwise.
          */
         @JavascriptInterface
-        public boolean registerUser(String fullname, String username, String email, String password, String role, String faculty, String major, String year, String yearLevelstudent) {
+        public boolean registerUser(String fullname, String username, String email, String password, String role, String faculty, String major, String year, String courses, String yearLevelstudent) {
             OkHttpClient client = new OkHttpClient();
 
             // Create JSON payload
@@ -103,8 +103,10 @@ public class AuthActivity extends AppCompatActivity {
                 jsonPayload.put("role", role); // Role can be "student" or "tutor"
                 jsonPayload.put("faculty", faculty);
                 jsonPayload.put("major", major);
+                jsonPayload.put("courses", courses);
                 jsonPayload.put("yearleveltutor", year);
                 jsonPayload.put("yearlevelstudent", yearLevelstudent);
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;

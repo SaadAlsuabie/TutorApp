@@ -9,7 +9,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     />
-    <!-- Font Awesome (CDN) for icons -->
+    <!-- Font Awesome (CDN) for icons --> 
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -359,6 +359,16 @@
                       
                     />
                 </div>
+                <div class="mb-3">
+                  <label for="message" class="form-label">Message to the Tutor</label>
+                  <input
+                      type="text"
+                      class="form-control"
+                      id="message"
+                      placeholder="Message"
+                      
+                    />
+                </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
             </div>
@@ -376,10 +386,12 @@
       e.preventDefault();
       const sessionType = document.getElementById('sessionType').value;
       const RequestTime = document.getElementById('request_time').value;
+      const Message = document.getElementById('message').value;
       showLoadingSpinner();
-      AndroidInterface.requestSession(userId, sessionType, RequestTime);
-
       modal.hide();
+      AndroidInterface.requestSession(userId, sessionType, RequestTime, Message);
+
+      
     });
   }
   </script>

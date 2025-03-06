@@ -173,7 +173,7 @@ public class StudentFindTutorFragment extends Fragment {
         }
 
         @JavascriptInterface
-        public void requestSession(String userId, String sessionType, String requestTime){
+        public void requestSession(String userId, String sessionType, String requestTime, String message){
             String url = "/request-session/";
 
             try {
@@ -181,6 +181,7 @@ public class StudentFindTutorFragment extends Fragment {
                 jsonPayload.put("tutor", userId);
                 jsonPayload.put("session_type", sessionType);
                 jsonPayload.put("requested_time", requestTime);
+                jsonPayload.put("message", message);
 
                 api.post(url, jsonPayload.toString(), new Callback() {
                     @Override
@@ -197,10 +198,10 @@ public class StudentFindTutorFragment extends Fragment {
                         if (response.isSuccessful()) {
                             try {
                                 JSONObject jsonResponse = API.parseResponse(response);
-                                String message = jsonResponse.optString("message", "request successful");
+//                                String message = jsonResponse.optString("message", "request successful");
                                 requireActivity().runOnUiThread(() -> {
                                     webview.evaluateJavascript("hideLoadingSpinner()", null);
-                                    webview.evaluateJavascript("showToast("+ message +", 'success', 4000)", null);
+                                    webview.evaluateJavascript("showToast(\"Session request sent\", 'success', 4000)", null);
                                 });
                             } catch (Exception e) {
                                 requireActivity().runOnUiThread(() -> {
