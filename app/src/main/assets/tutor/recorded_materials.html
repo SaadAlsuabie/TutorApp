@@ -88,63 +88,116 @@
       <div class="upload-section mb-3">
         <p class="mb-2">Add a new recorded lesson</p>
         <input
-          type="text"
+          type="text" id="title"
           class="form-control mb-2"
-          placeholder="Lecture Title"
+          placeholder="Lecture Title" required
         />
         <input
-          type="text"
+          type="text" id="course"
           class="form-control mb-2"
-          placeholder="Associated Course"
+          placeholder="Associated Course" required
         />
+        <textarea
+          class="form-control mb-2" id="description"
+          placeholder="Description" required></textarea>
+        
         <input
-          type="number"
+          type="number" id="price"
           class="form-control mb-2"
-          placeholder="Price ($)"
+          placeholder="Price ($)" required
         />
-        <button class="btn btn-primary w-100 upload-btn" type="button">
+        <input  class="form-control mb-2" type="file" id="fileInput" accept="video/*">
+        <button class="btn btn-primary w-100 upload-btn" type="button" onclick="uploadFile()">
           <i class="fas fa-upload me-1"></i>Upload
         </button>
       </div>
 
       <!-- Material Cards -->
       <!-- Example Material 1 -->
-      <div class="material-card">
-        <h6>Calculus Basics - Part 1</h6>
-        <p class="material-info">Course: MATH101</p>
-        <p class="material-price mb-2">$10.00</p>
-        <div class="material-actions d-flex gap-2">
-          <button class="btn btn-sm btn-secondary" type="button">
-            <i class="fas fa-edit me-1"></i>Edit
-          </button>
-          <button class="btn btn-sm btn-danger" type="button">
-            <i class="fas fa-trash me-1"></i>Delete
-          </button>
-          <button class="btn btn-sm btn-outline-primary" type="button">
-            <i class="fas fa-chart-bar me-1"></i>Stats
-          </button>
+      <div class="uploads">
+        <div class="material-card">
+          <h6>Calculus Basics - Part 1</h6>
+          <p class="material-info">Course: MATH101</p>
+          <p class="material-price mb-2">$10.00</p>
+          <div class="material-actions d-flex gap-2">
+            <button class="btn btn-sm btn-secondary" type="button">
+              <i class="fas fa-edit me-1"></i>Edit
+            </button>
+            <button class="btn btn-sm btn-danger" type="button">
+              <i class="fas fa-trash me-1"></i>Delete
+            </button>
+            <button class="btn btn-sm btn-outline-primary" type="button">
+              <i class="fas fa-chart-bar me-1"></i>Stats
+            </button>
+          </div>
         </div>
-      </div>
-
-      <!-- Example Material 2 -->
-      <div class="material-card">
-        <h6>Advanced Java Programming</h6>
-        <p class="material-info">Course: CS202</p>
-        <p class="material-price mb-2">$15.00</p>
-        <div class="material-actions d-flex gap-2">
-          <button class="btn btn-sm btn-secondary" type="button">
-            <i class="fas fa-edit me-1"></i>Edit
-          </button>
-          <button class="btn btn-sm btn-danger" type="button">
-            <i class="fas fa-trash me-1"></i>Delete
-          </button>
-          <button class="btn btn-sm btn-outline-primary" type="button">
-            <i class="fas fa-chart-bar me-1"></i>Stats
-          </button>
+  
+        <!-- Example Material 2 -->
+        <div class="material-card">
+          <h6>Advanced Java Programming</h6>
+          <p class="material-info">Course: CS202</p>
+          <p class="material-price mb-2">$15.00</p>
+          <div class="material-actions d-flex gap-2">
+            <button class="btn btn-sm btn-secondary" type="button">
+              <i class="fas fa-edit me-1"></i>Edit
+            </button>
+            <button class="btn btn-sm btn-danger" type="button">
+              <i class="fas fa-trash me-1"></i>Delete
+            </button>
+            <button class="btn btn-sm btn-outline-primary" type="button">
+              <i class="fas fa-chart-bar me-1"></i>Stats
+            </button>
+          </div>
         </div>
-      </div>
+      
+      
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+    <script>
+      function uploadFile() {
+          const fileInput = document.getElementById('fileInput');
+          const file = fileInput.files[0];
+          const title = document.getElementById('title').value;
+          const course = document.getElementById('course').value;
+          const price = document.getElementById('price').value;
+          const description = document.getElementById('description').value;
+
+          if (!file || !title || !course || !price || !description) {
+              alert('Please fill all fields and select a file.');
+              return;
+          }
+
+          // Check if the file is a video
+          if (!file.type.startsWith('video/')) {
+              alert('Please select a video file.');
+              return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = function (event) {
+              const fileData = event.target.result.split(',')[1]; // Get base64 data
+              const fileName = file.name;
+
+              // Send file and JSON data to Android Java code
+              Android.uploadFile(fileData, fileName, title, course, price, description);
+          };
+          reader.readAsDataURL(file); // Read file as base64
+      }
+
+      function playVideo(videoPath) {
+          const videoPlayer = document.getElementById('videoPlayer');
+          videoPlayer.src = videoPath;
+          videoPlayer.play();
+      }
+
+      // Fetch video by ID (example: fetch video with ID 1)
+      function fetchVideo() {
+          const materialId = 1; // Replace with the actual material ID
+          Android.fetchVideo(materialId);
+      }
+      
+  </script>
   </body>
 </html>
