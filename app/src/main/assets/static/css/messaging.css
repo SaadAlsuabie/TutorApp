@@ -1,0 +1,26 @@
+/* Custom CSS for the modal and messages */
+#messagesContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 90%;
+  }
+  
+  .message {
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 12px;
+    word-wrap: break-word;
+  }
+  
+  .message.me {
+    align-self: flex-end;
+    background-color: #673ab7;
+    color: white;
+  }
+  
+  .message.other {
+    align-self: flex-start;
+    background-color: #e9ecef;
+    color: black;
+  }
