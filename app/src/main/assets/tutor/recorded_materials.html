@@ -78,12 +78,61 @@
       .material-actions .btn {
         font-size: 0.85rem;
       }
+      
+    /* Loading Spinner Container */
+    .loading-spinner-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.75); /* Semi-transparent black background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1050;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Spinner Content */
+    .loading-spinner-content {
+      text-align: center;
+    }
+
+    /* Spinner Text */
+    .loading-spinner-content p {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.2rem;
+      margin-top: 10px;
+      color: #fff;
+    }
+
+    /* Smooth Fade-In/Out Effect */
+    .loading-spinner-container.fade-in {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .loading-spinner-container.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
     </style>
   </head>
   <body>
     
 
     <div class="container my-3">
+      <!-- Loading Spinner -->
+      <div id="loadingSpinner" class="loading-spinner-container d-none">
+        <div class="loading-spinner-content">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-white">Please wait...</p>
+        </div>
+    </div>
       <!-- Upload Section (Optional) -->
       <div class="upload-section mb-3">
         <p class="mb-2">Add a new recorded lesson</p>
@@ -115,7 +164,7 @@
       <!-- Material Cards -->
       <!-- Example Material 1 -->
       <div class="uploads">
-        <div class="material-card">
+        <div class="material-card d-none">
           <h6>Calculus Basics - Part 1</h6>
           <p class="material-info">Course: MATH101</p>
           <p class="material-price mb-2">$10.00</p>
@@ -129,11 +178,11 @@
             <button class="btn btn-sm btn-outline-primary" type="button">
               <i class="fas fa-chart-bar me-1"></i>Stats
             </button>
-          </div>
+          </div> 
         </div>
   
         <!-- Example Material 2 -->
-        <div class="material-card">
+        <div class="material-card d-none">
           <h6>Advanced Java Programming</h6>
           <p class="material-info">Course: CS202</p>
           <p class="material-price mb-2">$15.00</p>
@@ -150,12 +199,58 @@
           </div>
         </div>
       
-      
+        <div class="toast-container position-fixed p-3" id="toastContainer" style="bottom: 60px; left:10px;"></div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
     <script>
+      function showToast(message, type = "primary", duration = 3000) {
+        const container = document.getElementById("toastContainer");
+        const toastEl = document.createElement("div");
+        toastEl.classList.add("toast", "align-items-center", "text-bg-" + type, "border-0");
+        toastEl.setAttribute("role", "alert");
+        toastEl.setAttribute("aria-live", "assertive");
+        toastEl.setAttribute("aria-atomic", "true");
+        toastEl.innerHTML = `
+          <div class="d-flex">
+            <div class="toast-body">${message}</div>
+          </div>
+        `;
+        container.appendChild(toastEl);
+      
+        // Initialize bootstrap toast
+        const toast = new bootstrap.Toast(toastEl, { delay: duration });
+        toast.show();
+      
+        toastEl.addEventListener("hidden.bs.toast", () => {
+          if (container.contains(toastEl)) {
+            container.removeChild(toastEl);
+          }
+        });
+      }
+
+      const loadingSpinner = document.getElementById('loadingSpinner');
+
+      function showLoadingSpinner(message = 'Please wait...') {
+          const spinnerText = loadingSpinner.querySelector('p');
+          spinnerText.textContent = message; 
+          loadingSpinner.classList.remove('d-none', 'fade-out');
+          loadingSpinner.classList.add('fade-in');
+
+          setTimeout(() => {
+              hideLoadingSpinner();
+          }, 1000 * 60 * 30);
+      }
+      
+      function hideLoadingSpinner() {
+          loadingSpinner.classList.remove('fade-in');
+          loadingSpinner.classList.add('fade-out');
+          setTimeout(() => {
+              loadingSpinner.classList.add('d-none');
+          }, 300);
+      }
       function uploadFile() {
           const fileInput = document.getElementById('fileInput');
           const file = fileInput.files[0];
@@ -165,27 +260,28 @@
           const description = document.getElementById('description').value;
 
           if (!file || !title || !course || !price || !description) {
-              alert('Please fill all fields and select a file.');
+              showToast('Please fill all fields and select a file.', 'danger', 4000);
               return;
           }
 
           // Check if the file is a video
           if (!file.type.startsWith('video/')) {
-              alert('Please select a video file.');
+              showToast('Please select a video file.', 'danger', 4000);
               return;
           }
-
+          
           const reader = new FileReader();
           reader.onload = function (event) {
               const fileData = event.target.result.split(',')[1]; // Get base64 data
               const fileName = file.name;
-
+              showLoadingSpinner();
+              
               // Send file and JSON data to Android Java code
               Android.uploadFile(fileData, fileName, title, course, price, description);
           };
           reader.readAsDataURL(file); // Read file as base64
       }
-
+      
       function playVideo(videoPath) {
           const videoPlayer = document.getElementById('videoPlayer');
           videoPlayer.src = videoPath;
@@ -197,7 +293,47 @@
           const materialId = 1; // Replace with the actual material ID
           Android.fetchVideo(materialId);
       }
+
       
+      function displayUploads(uploadsList){
+        
+        const container = document.querySelector('.uploads'); 
+        const existingCards = container.querySelectorAll('.material-card');
+        existingCards.forEach(card => card.remove());
+
+        if (uploadsList.length === 0){
+          const noTutorsMessage = document.createElement('p');
+          noTutorsMessage.textContent = 'No recordings found.';
+          noTutorsMessage.style.textAlign = 'center';
+          noTutorsMessage.style.color = '#555';
+          container.appendChild(noTutorsMessage);
+        }
+
+        uploadsList.forEach(upload =>{
+          const materialCard = document.createElement('div');
+          materialCard.className = 'material-card';
+
+          materialCard.innerHTML = `
+            <h6>${upload.title}</h6>
+            <p class="material-info">Course: ${upload.course}</p>
+            <p class="material-price mb-2">$${upload.cost}</p>
+            <div class="material-actions d-flex gap-2">
+              <button class="btn btn-sm btn-secondary d-none" type="button">
+                <i class="fas fa-edit me-1"></i>Edit
+              </button>
+              <button class="btn btn-sm btn-danger d-none" type="button">
+                <i class="fas fa-trash me-1"></i>Delete
+              </button>
+              <button class="btn btn-sm btn-outline-primary d-none" type="button">
+                <i class="fas fa-chart-bar me-1"></i>Stats
+              </button>
+            </div>
+          `
+          container.appendChild(materialCard);
+        });
+      }
+      showLoadingSpinner();
+      Android.fetchUploads();
   </script>
   </body>
 </html>

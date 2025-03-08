@@ -98,12 +98,11 @@
         font-size: 0.85rem;
       }
     </style>
+    <link rel="stylesheet" href="../static/css/loading-spinner.css">
   </head>
   <body>
-    
-
     <!-- Main Container -->
-    <div class="container my-3">
+    <div class="container my-3 main-container">
       <!-- Stats Row (cards) -->
       <div class="row g-3">
         <!-- Card 1: Accepted Bookings -->
@@ -111,23 +110,23 @@
           <div class="stats-card">
             <i class="fas fa-calendar-check stats-icon"></i>
             <h4>Accepted Bookings</h4>
-            <p>4</p>
+            <p id="bookings">0</p>
           </div>
         </div>
         <!-- Card 2: Pending Requests -->
         <div class="col-12 col-md-4">
           <div class="stats-card">
             <i class="fas fa-hourglass-half stats-icon"></i>
-            <h4>Pending Requests</h4>
-            <p>2</p>
+            <h4 >Pending Requests</h4>
+            <p id="requests">0</p>
           </div>
         </div>
         <!-- Card 3: Earnings -->
         <div class="col-12 col-md-4">
           <div class="stats-card">
             <i class="fas fa-dollar-sign stats-icon"></i>
-            <h4>Earnings</h4>
-            <p>$120</p>
+            <h4 >Earnings</h4>
+            <p id="earnings">$0.00</p>
           </div>
         </div>
       </div>
@@ -136,8 +135,9 @@
       <div class="mt-4">
         <h5 class="mb-3">Upcoming Sessions</h5>
 
-        <!-- Session Card 1 -->
-        <div class="session-card">
+        <div class="sessionscontainer">
+          <!-- Session Card 1 -->
+        <div class="session-card d-none">
           <div class="d-flex justify-content-between align-items-start">
             <div>
               <h6>One-on-One with Sarah Lee</h6>
@@ -159,7 +159,7 @@
         </div>
 
         <!-- Session Card 2 -->
-        <div class="session-card">
+        <div class="session-card d-none">
           <div class="d-flex justify-content-between align-items-start">
             <div>
               <h6>Group Session with John Doe & Others</h6>
@@ -181,7 +181,7 @@
         </div>
 
         <!-- Session Card 3 (Another Example) -->
-        <div class="session-card">
+        <div class="session-card d-none">
           <div class="d-flex justify-content-between align-items-start">
             <div>
               <h6>One-on-One with Emily Brown</h6>
@@ -201,36 +201,13 @@
             </button>
           </div>
         </div>
+        </div>
       </div>
     </div>
 
     <!-- Bootstrap JS (only if needed for certain components) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      function showToast(message, type = "primary", duration = 3000) {
-        const container = document.getElementById("toastContainer");
-        const toastEl = document.createElement("div");
-        toastEl.classList.add("toast", "align-items-center", "text-bg-" + type, "border-0");
-        toastEl.setAttribute("role", "alert");
-        toastEl.setAttribute("aria-live", "assertive");
-        toastEl.setAttribute("aria-atomic", "true");
-        toastEl.innerHTML = `
-          <div class="d-flex">
-            <div class="toast-body">${message}</div>
-          </div>
-        `;
-        container.appendChild(toastEl);
-      
-        // Initialize bootstrap toast
-        const toast = new bootstrap.Toast(toastEl, { delay: duration });
-        toast.show();
-      
-        toastEl.addEventListener("hidden.bs.toast", () => {
-          if (container.contains(toastEl)) {
-            container.removeChild(toastEl);
-          }
-        });
-      }
-    </script>
+    <script src="../static/js/toast.js"></script>
+    <script src="../static/js/dashboard.js"></script>
   </body>
 </html>

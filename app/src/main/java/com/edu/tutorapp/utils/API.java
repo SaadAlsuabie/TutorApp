@@ -59,6 +59,11 @@ public class API {
         client.newCall(request).enqueue(callback);
     }
 
+    public void post(String url, RequestBody body, boolean hasFile , Callback callback) {
+        Request request = buildRequest(BASEURL+url, "POST", body);
+        client.newCall(request).enqueue(callback);
+    }
+
     /**
      * Perform a PUT request to the specified URL with a JSON payload.
      *
