@@ -149,6 +149,6 @@ data: {
 }
 };
 
-
-showLoadingSpinner();
-Android.fetchDashboard();
+displayDashboard(data, 'tutor');
+// showLoadingSpinner();
+// Android.fetchDashboard();

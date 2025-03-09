@@ -90,20 +90,24 @@
         padding: 0.3rem 0.6rem;
       }
     </style>
+    <link rel="stylesheet" href="../static/css/loading-spinner.css">
   </head>
   <body>
     
 
-    <div class="container my-3">
+    <div class="container my-3 main-container">
       <!-- Current Earnings Card -->
       <div class="earnings-card">
         <h4>Total Earnings</h4>
-        <p class="earnings-amount">$250</p>
+        <p class="earnings-amount">$ 0.00</p>
       </div>
 
       <!-- Transaction Cards -->
       <!-- Example Transaction 1 -->
-      <div class="transaction-card">
+       <div class="transactions-container">
+
+       </div>
+      <div class="transaction-card d-none">
         <div class="d-flex justify-content-between align-items-start">
           <div>
             <h6>One-on-One with Sarah Lee</h6>
@@ -118,7 +122,7 @@
       </div>
 
       <!-- Example Transaction 2 -->
-      <div class="transaction-card">
+      <div class="transaction-card d-none">
         <div class="d-flex justify-content-between align-items-start">
           <div>
             <h6>Group Session with John Doe</h6>
@@ -133,7 +137,7 @@
       </div>
 
       <!-- Example Transaction 3 -->
-      <div class="transaction-card">
+      <div class="transaction-card d-none">
         <div class="d-flex justify-content-between align-items-start">
           <div>
             <h6>Physics 305 - Recorded Material</h6>
@@ -150,5 +154,7 @@
 
     <!-- Bootstrap JS (optional) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../static/js/toast.js"></script>
+  <script src="../static/js/earnings.js"></script>
   </body>
 </html>

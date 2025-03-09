@@ -101,12 +101,13 @@
         margin: .4rem 0;
       }
     </style>
+    <link rel="stylesheet" href="../static/css/loading-spinner.css">
   </head>
   <body>
     
 
     <!-- Main Container -->
-    <div class="container my-3">
+    <div class="container my-3 main-container">
       <!-- Stats Row (cards) -->
       <div class="row g-3">
         <!-- Card 1: Upcoming Sessions -->
@@ -114,7 +115,7 @@
           <div class="stats-card">
             <i class="fas fa-calendar-alt stats-icon"></i>
             <h4>Upcoming</h4>
-            <p>3</p>
+            <p id="upcoming">0</p>
           </div>
         </div>
         <!-- Card 2: Pending Requests -->
@@ -122,7 +123,7 @@
           <div class="stats-card">
             <i class="fas fa-hourglass-half stats-icon"></i>
             <h4>Pending</h4>
-            <p>2</p>
+            <p id="pending">0</p>
           </div>
         </div>
         <!-- Card 3: Recorded Lectures -->
@@ -130,7 +131,7 @@
           <div class="stats-card">
             <i class="fas fa-play-circle stats-icon"></i>
             <h4>Recorded</h4>
-            <p>5</p>
+            <p id="recorded">0</p>
           </div>
         </div>
       </div>
@@ -139,8 +140,11 @@
       <div class="mt-4">
         <h5 class="mb-3">Upcoming Sessions</h5>
 
+        <div class="upcoming-container">
+
+        </div>
         <!-- Session Card 1 -->
-        <div class="session-card">
+        <div class="session-card d-none">
           <div class="d-flex justify-content-between align-items-start">
             <div>
               <h6>One-on-One with John Doe</h6>
@@ -154,7 +158,7 @@
         </div>
 
         <!-- Session Card 2 -->
-        <div class="session-card">
+        <div class="session-card d-none">
           <div class="d-flex justify-content-between align-items-start">
             <div>
               <h6>Group Session with Jane Smith</h6>
@@ -168,7 +172,7 @@
         </div>
 
         <!-- Session Card 3 -->
-        <div class="session-card">
+        <div class="session-card d-none">
           <div class="d-flex justify-content-between align-items-start">
             <div>
               <h6>One-on-One with Robert Brown</h6>
@@ -185,31 +189,7 @@
 
     <!-- Bootstrap JS (only if needed for certain components) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    function showToast(message, type = "primary", duration = 3000) {
-      const container = document.getElementById("toastContainer");
-      const toastEl = document.createElement("div");
-      toastEl.classList.add("toast", "align-items-center", "text-bg-" + type, "border-0");
-      toastEl.setAttribute("role", "alert");
-      toastEl.setAttribute("aria-live", "assertive");
-      toastEl.setAttribute("aria-atomic", "true");
-      toastEl.innerHTML = `
-        <div class="d-flex">
-          <div class="toast-body">${message}</div>
-        </div>
-      `;
-      container.appendChild(toastEl);
-    
-      // Initialize bootstrap toast
-      const toast = new bootstrap.Toast(toastEl, { delay: duration });
-      toast.show();
-    
-      toastEl.addEventListener("hidden.bs.toast", () => {
-        if (container.contains(toastEl)) {
-          container.removeChild(toastEl);
-        }
-      });
-    }
-  </script>
+  <script src="../static/js/toast.js"></script>
+    <script src="../static/js/student-dashboard.js"></script>
   </body>
 </html>
