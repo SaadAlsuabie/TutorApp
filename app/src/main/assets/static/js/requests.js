@@ -1,11 +1,20 @@
 
 const requestContainer = document.querySelector('.request-container');
+
+let isModalOpen = false;
 function displayRequests(jsonResponse, page, portal){
 
+    requestContainer.innerHTML = '';
     if (portal === "tutor"){
         if (page === "pending"){
             const pendingRequestsList = jsonResponse.data
-
+            if (pendingRequestsList.length === 0){
+              const noTutorsMessage = document.createElement('p');
+              noTutorsMessage.textContent = 'No requests found.';
+              noTutorsMessage.style.textAlign = 'center';
+              noTutorsMessage.style.color = '#555';
+              requestContainer.appendChild(noTutorsMessage);
+          }
             pendingRequestsList.forEach(request =>{
                 const requestCard = document.createElement('div');
                 requestCard.classList.add('request-card');
@@ -39,6 +48,13 @@ function displayRequests(jsonResponse, page, portal){
     
         } else if(page === "accepted"){
             const acceptedRequestList = jsonResponse.data
+            if (acceptedRequestList.length === 0){
+                const noTutorsMessage = document.createElement('p');
+                noTutorsMessage.textContent = 'No requests found.';
+                noTutorsMessage.style.textAlign = 'center';
+                noTutorsMessage.style.color = '#555';
+                requestContainer.appendChild(noTutorsMessage);
+            }
 
             acceptedRequestList.forEach(request =>{
                 const sessionCard = document.createElement('div');
@@ -60,7 +76,7 @@ function displayRequests(jsonResponse, page, portal){
                     <button class="btn d-none btn-sm btn-primary" type="button">
                         View Details
                     </button>
-                    <button class="btn btn-sm btn-success message-btn" type="button" data-request-id="${request.request_id} data-student-id="${request.student}>
+                    <button class="btn btn-sm btn-success message-btn" type="button" data-request-id="${request.request_id}" data-student-id="${request.student}">
                         Message Student
                     </button>
                     </div>
@@ -73,7 +89,7 @@ function displayRequests(jsonResponse, page, portal){
     }
     
 }
-
+let messagePollingInterval = null;
 requestContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('accept-btn')) {
         const requestId = event.target.getAttribute('data-request-id');
@@ -85,26 +101,46 @@ requestContainer.addEventListener('click', (event) => {
         handleDeclineRequest(requestId);
     } else if (event.target.classList.contains('message-btn')) {
         const requestId = event.target.getAttribute('data-request-id');
-        const studentId = event.target.getAttribute('data-student-id');
+        const studentId = 1;//event.target.getAttribute('data-student-id');
         console.log('Messaging button clicked for request ID:', requestId);
         fetchMessages(requestId, studentId);
+        startMessagePolling(requestId, studentId);
     }
 });
 
 function handleAcceptRequest(requestId) {
     showLoadingSpinner();
-    Android.acceptRequest();
+    Android.acceptRequest(requestId);
 }
 
 function handleDeclineRequest(requestId) {
     showLoadingSpinner();
-    Android.declineRequest();
+    Android.declineRequest(requestId);
 }
 
 function fetchMessages(requestId, studentId) {
     showLoadingSpinner();
-    displayMessagesFromServer(messages, requestId);
-    // Android.fetchMessagesFromServer(requestId, studentId);
+    // displayMessagesFromServer(messages, requestId);
+    Android.fetchMessagesFromServer(requestId, studentId);
+}
+
+function startMessagePolling(requestId, studentId) {
+  if (messagePollingInterval) {
+      clearInterval(messagePollingInterval);
+  }
+
+  messagePollingInterval = setInterval(() => {
+      Android.fetchMessagesFromServer(requestId, studentId);
+  }, 5000);
+
+  const messageModal = document.getElementById('messageModal');
+  messageModal.addEventListener('hidden.bs.modal', () => {
+      isModalOpen = false;
+      if (messagePollingInterval) {
+          clearInterval(messagePollingInterval);
+          messagePollingInterval = null;
+      }
+  });
 }
 
 function sendMessage() {
@@ -151,8 +187,13 @@ function displayMessagesFromServer(response, requestId) {
       sendBtn.setAttribute('data-request-id', requestId);
   
       // Show the modal
-      const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
-      messageModal.show();
+      // const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+      // messageModal.show();
+      if (!isModalOpen) {
+        const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        messageModal.show();
+        isModalOpen = true;
+    }
   
       // Scroll to the bottom of the messages container
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -197,7 +238,7 @@ const acceptedrequests = {
     }
   ]
 }
-displayRequests(acceptedrequests, 'accepted', 'tutor')
+// displayRequests(acceptedrequests, 'accepted', 'tutor')
 const messages = {
         data: [
           {
@@ -283,7 +324,11 @@ const messages = {
         ]
       }
 
-// showLoadingSpinner();
+function fetchPendingRequests(){
+  showLoadingSpinner();
+  Android.fetchPendingRequests()
+}
+fetchPendingRequests();
 // displayMessagesFromServer(messages, 1);
 
 

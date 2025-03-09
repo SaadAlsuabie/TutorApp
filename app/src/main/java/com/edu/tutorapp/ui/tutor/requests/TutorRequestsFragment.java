@@ -21,6 +21,7 @@ import com.edu.tutorapp.ui.tutor.dashboard.TutorDashboardFragment;
 import com.edu.tutorapp.utils.API;
 import com.edu.tutorapp.utils.SharedPreferencesUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -72,8 +73,68 @@ public class TutorRequestsFragment extends Fragment {
         public void fetchPendingRequests(){
             getPendingRequests();
         }
+
+        @JavascriptInterface
+        public void acceptRequest(String requestID){
+            sendAcceptRequest(requestID);
+        }
+        @JavascriptInterface
+        public void declineRequest(String requestID){
+            sendDeclineRequest(requestID);
+        }
     }
 
+    public void sendDeclineRequest(String requestID) {
+        String url = "/accept-decline-session/"+requestID+"/?action=decline";
+        try {
+            JSONObject payload = new JSONObject();
+            payload.put("decline_reason", "Unknown");
+            api.post(url, payload.toString(), new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    requireActivity().runOnUiThread(() ->{
+                        webview.evaluateJavascript("hideLoadingSpinner()", null);
+                        webview.evaluateJavascript("showToast('An error occurred while sending the request', 'danger', 4000)", null);
+                    });
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    requireActivity().runOnUiThread(() ->{
+                        webview.evaluateJavascript("hideLoadingSpinner()", null);
+                        webview.evaluateJavascript("fetchPendingRequests()", null);
+                    });
+                }
+            });
+        } catch (JSONException e) {
+            requireActivity().runOnUiThread(() ->{
+                webview.evaluateJavascript("hideLoadingSpinner()", null);
+                webview.evaluateJavascript("showToast('An error occurred while sending the request', 'danger', 4000)", null);
+            });
+        }
+
+    }
+    public  void sendAcceptRequest(String requestID){
+        String url = "/accept-decline-session/"+requestID+"/?action=accept";
+        JSONObject jsonBody = new JSONObject();
+        api.post(url, jsonBody.toString(), new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                requireActivity().runOnUiThread(() ->{
+                    webview.evaluateJavascript("hideLoadingSpinner()", null);
+                    webview.evaluateJavascript("showToast('An error occurred while sending the request', 'danger', 4000)", null);
+                });
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                requireActivity().runOnUiThread(() ->{
+                    webview.evaluateJavascript("hideLoadingSpinner()", null);
+                    webview.evaluateJavascript("fetchPendingRequests()", null);
+                });
+            }
+        });
+    }
     public void getPendingRequests(){
         api.get("/request-session-listings/?query=pending", new Callback() {
             @Override

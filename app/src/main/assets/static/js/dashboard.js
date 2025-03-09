@@ -1,6 +1,6 @@
-
+ 
 function displayDashboard(details_, page){
-
+    hideLoadingSpinner();
     if (page === "tutor") {
         const dashboardDetails = details_.data;
     
@@ -149,6 +149,6 @@ data: {
 }
 };
 
-displayDashboard(data, 'tutor');
-// showLoadingSpinner();
-// Android.fetchDashboard();
+// displayDashboard(data, 'tutor');
+showLoadingSpinner();
+Android.fetchDashboard();

@@ -72,5 +72,5 @@ const transactions = {
     }
     
   showLoadingSpinner();
-//   getTransactions();
-  displayTransactions(transactions);
+  getTransactions();
+  // displayTransactions(transactions);

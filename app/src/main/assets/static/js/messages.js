@@ -37,12 +37,15 @@ function displayConversations(response){
     });
 }
 
+
+
 conversationContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('conversation-card')) {
         const requestId = event.target.getAttribute('data-chat-id');
         const studentId = 1
         // console.log('Messaging button clicked for request ID:', requestId);
         fetchMessages(requestId, studentId);
+        startMessagePolling(requestId, studentId);
     }
 });
 
@@ -65,4 +68,5 @@ const conversations = {
       },
     ]
   }
-  displayConversations(conversations);
+  // displayConversations(conversations);
+  Android.fetchConversations();
