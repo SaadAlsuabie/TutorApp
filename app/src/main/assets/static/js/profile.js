@@ -32,4 +32,5 @@ const profile = {
         }
 }
 
-updateProfile(profile);
+// updateProfile(profile);
+Android.fetchProfile();

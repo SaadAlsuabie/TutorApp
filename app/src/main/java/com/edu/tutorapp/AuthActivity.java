@@ -36,7 +36,10 @@ public class AuthActivity extends AppCompatActivity {
     private static final String KEY_ACCESS_TOKEN = "access_token"; // Key for storing access token
     private static final String KEY_REFRESH_TOKEN = "refresh_token"; // Key for storing refresh token
     private static final String KEY_TIMEOUT = "timeout"; // Key for storing timeout
-
+    private static final String KEY_FACULTY= "faculty";
+    private static final String KEY_MAJOR = "major";
+    private static final String KEY_RATE = "rate";
+    private static final String KEY_RATING = "rating";
     private SharedPreferences sharedPreferences;
     private SharedPreferencesUtils sharedPreferencesUtils;
 
@@ -282,11 +285,17 @@ public class AuthActivity extends AppCompatActivity {
                                 String access_token = jsonResponse.getString("access");
                                 String refresh_token = jsonResponse.getString("refresh");
                                 String username = jsonResponse.getString("username");
+                                String rate = jsonResponse.getString("rate");
+                                String email = jsonResponse.getString("email");
+                                String faculty = jsonResponse.getString("faculty");
+                                String major = jsonResponse.getString("major");
+                                String rating = jsonResponse.getString("rating");
 
                                 sharedPreferencesUtils.saveRole(role);
                                 sharedPreferencesUtils.saveUsername(username);
                                 sharedPreferencesUtils.saveAccessToken(access_token);
                                 sharedPreferencesUtils.saveRefreshToken(refresh_token);
+                                sharedPreferencesUtils.createProfile(username, email, faculty, major, rate, rating);
 
                                 ((AuthActivity) mContext).runOnUiThread(() -> {
                                     myWebView.evaluateJavascript("hideLoadingSpinner()", new ValueCallback<String>() {

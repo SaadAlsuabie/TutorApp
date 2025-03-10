@@ -3,6 +3,9 @@ package com.edu.tutorapp.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class SharedPreferencesUtils {
     private static final String SHARED_PREF_NAME = "MyAppPreferences"; // Name of the preference file
     private static final String KEY_USERNAME = "username"; // Key for storing username
@@ -10,7 +13,11 @@ public class SharedPreferencesUtils {
     private static final String KEY_ACCESS_TOKEN = "access_token"; // Key for storing access token
     private static final String KEY_REFRESH_TOKEN = "refresh_token"; // Key for storing refresh token
     private static final String KEY_TIMEOUT = "timeout"; // Key for storing timeout
-
+    private static final String KEY_FACULTY= "faculty";
+    private static final String KEY_EMAIL= "email";
+    private static final String KEY_MAJOR = "major";
+    private static final String KEY_RATE = "rate";
+    private static final String KEY_RATING = "rating";
     private SharedPreferences sharedPreferences;
 
     public SharedPreferencesUtils(Context context) {
@@ -96,6 +103,33 @@ public class SharedPreferencesUtils {
         saveString(KEY_REFRESH_TOKEN, refreshToken);
     }
 
+    public void createProfile(String username, String email, String faculty, String major, String rate, String rating){
+        saveString(KEY_EMAIL, email);
+        saveString(KEY_FACULTY, faculty);
+        saveString(KEY_MAJOR, major);
+        saveString(KEY_RATING, rating);
+        saveString(KEY_RATE, rate);
+    }
+    public JSONObject getProfile() throws JSONException {
+        String username = getString(KEY_USERNAME, "None");
+        String email = getString(KEY_EMAIL, "None");
+        String faculty = getString(KEY_FACULTY, "None");
+        String major = getString(KEY_MAJOR, "None");
+        String rate = getString(KEY_RATE, "None");
+        String rating = getString(KEY_RATING, "None");
+
+        JSONObject profile = new JSONObject();
+        JSONObject data = new JSONObject();
+        profile.put("data", data);
+        data.put("username", username);
+        data.put("email", email);
+        data.put("faculty", faculty);
+        data.put("major", major);
+        data.put("rate", rate);
+        data.put("rating", rating);
+
+        return profile;
+    }
     public String getRefreshToken() {
         return getString(KEY_REFRESH_TOKEN, "none");
     }
