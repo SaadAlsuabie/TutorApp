@@ -111,23 +111,26 @@
       <!-- Optional Filter Section -->
       <div class="filter-section mb-3">
         <!-- Example filter buttons (All, Owned, Available, New) -->
-        <button class="btn btn-outline-primary filter-btn" type="button">
+        <button class="btn d-none btn-outline-primary filter-btn" type="button">
           All
         </button>
-        <button class="btn btn-outline-primary filter-btn" type="button">
+        <button class="btn d-none btn-outline-primary filter-btn" type="button">
           Owned
         </button>
-        <button class="btn btn-outline-primary filter-btn" type="button">
+        <button class="btn d-none btn-outline-primary filter-btn" type="button">
           Available
         </button>
-        <button class="btn btn-outline-primary filter-btn" type="button">
+        <button class="btn d-none btn-outline-primary filter-btn" type="button">
           New
         </button>
       </div>
 
       <!-- Lecture Cards -->
       <!-- Example Lecture Card 1 (Owned / Watch) -->
-      <div class="lecture-card">
+       <div class="lecture-container">
+        <p style="color: #555; text-align:center;"> No recordings Found</p>
+       </div>
+      <div class="lecture-card d-none">
         <h6>Calculus 101 - Basics</h6>
         <p class="lecture-info">
           Tutor: John Doe <br />
@@ -145,7 +148,7 @@
       </div>
 
       <!-- Example Lecture Card 2 (Not Owned / Buy) -->
-      <div class="lecture-card">
+      <div class="lecture-card d-none">
         <h6>Java Programming Essentials</h6>
         <p class="lecture-info">
           Tutor: Jane Smith <br />
@@ -163,7 +166,7 @@
       </div>
 
       <!-- Example Lecture Card 3 (Owned / Watch) -->
-      <div class="lecture-card">
+      <div class="lecture-card d-none">
         <h6>Physics - Mechanics Deep Dive</h6>
         <p class="lecture-info">
           Tutor: Robert Brown <br />

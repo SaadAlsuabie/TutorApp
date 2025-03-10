@@ -90,20 +90,38 @@ function displayConversations(response){
         conversationContainer.append(conversationCard);
     });
 }
+function startMessagePolling(requestId, studentId) {
+  if (messagePollingInterval) {
+      clearInterval(messagePollingInterval);
+  }
 
+  messagePollingInterval = setInterval(() => {
+      Android.fetchMessagesFromServer(requestId, studentId);
+  }, 5000);
+
+  const messageModal = document.getElementById('messageModal');
+  messageModal.addEventListener('hidden.bs.modal', () => {
+      isModalOpen = false;
+      if (messagePollingInterval) {
+          clearInterval(messagePollingInterval);
+          messagePollingInterval = null;
+      }
+  });
+}
 conversationContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('conversation-card')) {
         const requestId = event.target.getAttribute('data-chat-id');
         const studentId = 1
         // console.log('Messaging button clicked for request ID:', requestId);
         fetchMessages(requestId, studentId);
+        startMessagePolling(requestId, studentId);
     }
 });
 
 function fetchMessages(requestId, studentId) {
     showLoadingSpinner();
-    displayMessagesFromServer(messages, requestId);
-    // Android.fetchMessagesFromServer(requestId, studentId);
+    // displayMessagesFromServer(messages, requestId);
+    Android.fetchMessagesFromServer(requestId, studentId);
 }
 
 const conversations = {
@@ -210,4 +228,5 @@ const conversations = {
   }
 
 
-  displayConversations(conversations);
+  // displayConversations(conversations);
+  Android.fetchConversations();

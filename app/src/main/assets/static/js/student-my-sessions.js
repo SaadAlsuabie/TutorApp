@@ -163,6 +163,7 @@ requestContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('message-tutor')){
         const requestID = event.target.getAttribute('data-request-id');
         fetchMessages(requestID)
+        startMessagePolling(requestId, studentId);
     } else
     if (event.target.classList.contains('view-details')){
         const studentName = event.target.getAttribute('data-student-name');
@@ -189,8 +190,27 @@ function showDetails(studentName, sessionType, tutorName, message, requestDate){
 
 function fetchMessages(requestId, studentId=null) {
     showLoadingSpinner();
-    displayMessagesFromServer(messages, requestId);
-    // Android.fetchMessagesFromServer(requestId, studentId);
+    // displayMessagesFromServer(messages, requestId);
+    Android.fetchMessagesFromServer(requestId, studentId);
+}
+
+function startMessagePolling(requestId, studentId) {
+  if (messagePollingInterval) {
+      clearInterval(messagePollingInterval);
+  }
+
+  messagePollingInterval = setInterval(() => {
+      Android.fetchMessagesFromServer(requestId, studentId);
+  }, 5000);
+
+  const messageModal = document.getElementById('messageModal');
+  messageModal.addEventListener('hidden.bs.modal', () => {
+      isModalOpen = false;
+      if (messagePollingInterval) {
+          clearInterval(messagePollingInterval);
+          messagePollingInterval = null;
+      }
+  });
 }
 
 function sendMessage() {
@@ -300,7 +320,7 @@ const data = {
     ]
 }
 
-displayRequests(data, 'accepted', 'student')
+// displayRequests(data, 'accepted', 'student')
 const messages = {
         data: [
           {
@@ -388,8 +408,8 @@ const messages = {
 
 // showLoadingSpinner();
 // displayMessagesFromServer(messages, 1);
-
-
+showLoadingSpinner();
+Android.fetchSessions();
 // setTimeout(() =>{
 //   hideLoadingSpinner();
 //   showToast("hello world", "danger", 4000);

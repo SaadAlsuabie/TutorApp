@@ -1,6 +1,6 @@
 window.onload = function () {
-    // showLoadingSpinner();
-    // AndroidInterface.getTutors('', '', '', '', 'onload');
+    showLoadingSpinner();
+    AndroidInterface.getTutors('', '', '', '', 'onload');
 };
 
 
@@ -182,4 +182,6 @@ const tutors = {
     ]
 }
 
-displayTutors(tutors.data, tutors.sessions);
+function displayTutorsFromSever(response){
+  displayTutors(response.data, response.sessions);
+}

@@ -7,11 +7,12 @@ function fetchTransactions(){
 }
 
 function displayTransactions(response){
+    hideLoadingSpinner();
     const transactions = response.data;
 
     if (transactions.length === 0){
         const noTutorsMessage = document.createElement('p');
-          noTutorsMessage.textContent = 'No Requests found.';
+          noTutorsMessage.textContent = 'No Transactions found.';
           noTutorsMessage.style.textAlign = 'center';
           noTutorsMessage.style.color = '#555';
           transactionsContainer.appendChild(noTutorsMessage);
@@ -52,4 +53,5 @@ const transactions = {
     balance: "0.00"
 }
 
-displayTransactions(transactions);
+fetchTransactions();
+// displayTransactions(transactions);

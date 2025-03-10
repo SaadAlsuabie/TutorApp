@@ -67,5 +67,5 @@ const data = {
     }
 }
 
-// fetchDashboard();
-displayDetails(data);
+fetchDashboard();
+// displayDetails(data);
